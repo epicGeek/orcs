@@ -1,0 +1,20 @@
+{
+  "name": "fusion-dhss-web",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.4",
+    "angular-route": "~1.4.4",
+    "angular-resource": "~1.4.4",
+    "angular-material": "master",
+    "bootstrap-css-only": "~3.3.4",
+    "echarts": "2.2.7",
+    "fontawesome": "https://github.com/FortAwesome/Font-Awesome.git#~4.4.0"
+  },
+  "version": "0.0.1"
+}

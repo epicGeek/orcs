@@ -1,0 +1,61 @@
+{"properties": [{
+  "name": "spring.jdbc.2nd.datasource.driver-class-name",
+  "type": "java.lang.String",
+  "description": "A description for 'spring.jdbc.2nd.datasource.driver-class-name'"
+},{
+  "name": "spring.jdbc.2nd.datasource.url",
+  "type": "java.lang.String",
+  "description": "A description for 'spring.jdbc.2nd.datasource.url'"
+},{
+  "name": "spring.jdbc.2nd.datasource.username",
+  "type": "java.lang.String",
+  "description": "A description for 'spring.jdbc.2nd.datasource.username'"
+},{
+  "name": "spring.jdbc.2nd.datasource.password",
+  "type": "java.lang.String",
+  "description": "A description for 'spring.jdbc.2nd.datasource.password'"
+},{
+  "name": "spring.jdbc.2nd.datasource.initial-size",
+  "type": "java.lang.Long",
+  "description": "A description for 'spring.jdbc.2nd.datasource.initial-size'"
+},{
+  "name": "spring.jdbc.2nd.datasource.max-active",
+  "type": "java.lang.Long",
+  "description": "A description for 'spring.jdbc.2nd.datasource.maxActive'"
+},{
+  "name": "spring.jdbc.2nd.datasource.max-idle",
+  "type": "java.lang.Long",
+  "description": "A description for 'spring.jdbc.2nd.datasource.maxIdle'"
+},{
+  "name": "spring.jdbc.2nd.datasource.min-idle",
+  "type": "java.lang.Long",
+  "description": "A description for 'spring.jdbc.2nd.datasource.minIdle'"
+},{
+  "name": "spring.jdbc.2nd.datasource.max-wait",
+  "type": "java.lang.Long",
+  "description": "A description for 'spring.jdbc.2nd.datasource.maxWait'"
+},{
+  "name": "spring.jdbc.2nd.datasource.validation-interval",
+  "type": "java.lang.String",
+  "description": "A description for 'spring.jdbc.2nd.datasource.validationInterval'"
+},{
+  "name": "spring.jdbc.2nd.datasource.validation-query",
+  "type": "java.lang.String",
+  "description": "A description for 'spring.jdbc.2nd.datasource.validationQuery'"
+},{
+  "name": "spring.jdbc.2nd.datasource.test-on-borrow",
+  "type": "java.lang.Boolean",
+  "description": "A description for 'spring.jdbc.2nd.datasource.testOnBorrow'"
+},{
+  "name": "spring.jdbc.2nd.datasource.test-while-idle",
+  "type": "java.lang.Boolean",
+  "description": "A description for 'spring.jdbc.2nd.datasource.testWhileIdle'"
+},{
+  "name": "spring.jdbc.2nd.datasource.time-between-eviction-runs-millis",
+  "type": "java.lang.Long",
+  "description": "A description for 'spring.jdbc.2nd.datasource.timeBetweenEvictionRunsMillis'"
+},{
+  "name": "spring.jdbc.2nd.datasource.min-evictable-idle-time-millis",
+  "type": "java.lang.Long",
+  "description": "A description for 'spring.jdbc.2nd.datasource.minEvictableIdleTimeMillis'"
+}]}

@@ -1,0 +1,11 @@
+{
+  "name": "fusion-lte-score-web",
+  "dependencies": {
+    "angular": "~1.4.4",
+    "angular-route": "~1.4.4",
+    "angular-resource": "~1.4.4",
+    "angular-material": "master",
+    "bootstrap-css-only": "~3.3.4",
+    "fontawesome": "https://github.com/FortAwesome/Font-Awesome.git#~4.4.0"
+  }
+}

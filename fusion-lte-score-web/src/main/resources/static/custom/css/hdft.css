@@ -1,0 +1,327 @@
+/*!
+header style
+ */
+
+.n-head {
+	border-top: 3px solid #1a1a1a
+}
+
+.n-head .n-topbar-wrap {
+	height: 32px;
+	background: #c60019
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-left {
+	float: left
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-left .n-logo {
+	height: 32px;
+	border-right: 1px solid #d13347;
+	float: left
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-left .n-topbar-nav {
+	height: 32px;
+	position: relative;
+	float: left;
+	border-right: 1px solid #d13347
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-left .n-topbar-nav p {
+	line-height: 32px;
+	font-size: 12px;
+	color: #f1d4d6;
+	padding: 0 18px 0 20px;
+	cursor: pointer;
+	position: relative;
+	z-index: 1
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-left .n-topbar-nav p.show {
+	background: #fff;
+	color: #000
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-left .n-topbar-nav p.show .arrow {
+	color: #aaa
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-left .n-topbar-nav .arrow {
+	padding-left: 7px;
+	color: #fff
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-left .n-topbar-nav .n-topbar-console-lsit {
+	display: none;
+	width: 250px;
+	height: 73px;
+	padding: 19px 0 0 10px;
+	position: absolute;
+	left: -1px;
+	top: 32px;
+	background: #fff;
+	border: 1px solid #c5c5c5;
+	border-top: none;
+	box-shadow: 0px 2px 4px #e7e7e7;
+	-webkit-box-shadow: 0px 2px 4px #e7e7e7;
+	-moz-box-shadow: 0px 2px 4px #e7e7e7
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-left .n-topbar-nav .n-topbar-console-lsit ul li {
+	float: left;
+	width: 120px;
+	height: 28px
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-left .n-topbar-nav .n-topbar-console-lsit ul li a {
+	line-height: 28px;
+	font-size: 12px;
+	color: #444;
+	cursor: pointer;
+	text-decoration: none;
+	display: block
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-left .n-topbar-nav .n-topbar-console-lsit ul li a .list-icon {
+	margin: 0 5px;
+	color: #989898
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-left .n-topbar-nav .n-topbar-console-lsit ul li a:hover {
+	text-decoration: none;
+	background: #ebebeb
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-left .n-topbar-nav .n-topbar-console-lsit ul li a:hover .list-icon {
+	color: #818181
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-right {
+	float: right
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-right .n-topbar-user {
+	height: 32px;
+	position: relative;
+	float: left
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-right .n-topbar-user p {
+	line-height: 32px;
+	font-size: 12px;
+	color: #f1d4d6;
+	padding: 0 12px 0 12px;
+	cursor: pointer;
+	position: relative;
+	z-index: 1
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-right .n-topbar-user p.show {
+	background: #fff;
+	color: #000
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-right .n-topbar-user p.show .arrow {
+	color: #aaa
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-right .n-topbar-user ul {
+	display: none;
+	width: 100%;
+	padding: 1px 0;
+	position: absolute;
+	right: -1px;
+	top: 32px;
+	z-index: 10;
+	background: #fff;
+	border: 1px solid #c5c5c5;
+	border-top: none;
+	box-shadow: 0px 2px 4px #e7e7e7;
+	-webkit-box-shadow: 0px 2px 4px #e7e7e7;
+	-moz-box-shadow: 0px 2px 4px #e7e7e7
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-right .n-topbar-user ul li a {
+	padding-left: 12px;
+	display: block;
+	height: 32px;
+	line-height: 32px;
+	font-size: 12px;
+	color: #444;
+	cursor: pointer;
+	text-decoration: none
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-right .n-topbar-user ul li a:hover {
+	text-decoration: none;
+	background: #f9f9f9
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-right .n-topbar-user .arrow {
+	padding-left: 4px;
+	color: #fff
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-right .n-help {
+	float: left;
+	line-height: 32px;
+	font-size: 12px;
+	color: #f1d4d6;
+	padding: 0 14px 0 18px;
+	text-decoration: none
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-right .n-help .arrow {
+	color: #fff;
+	padding-left: 4px
+}
+
+.n-head .n-topbar-wrap .n-topbar .n-topbar-right .n-help:hover {
+	text-decoration: none;
+	color: #f1d4d6
+}/*!
+header2 style
+ */.n-topbar-offline .topbar-login-hd {
+	height: 50px;
+	background: #C60019;
+	border-top: 3px solid #1A1A1A
+}
+
+.n-topbar-offline .topbar-login-hd-inner {
+	width: 97.5%;
+	margin: 0 auto;
+	padding: 0 15px;
+	max-width: 1170px
+}
+
+.n-topbar-offline .topbar-login-logo {
+	width: 210px;
+	margin-top: 10px;
+	float: left
+}
+
+.n-topbar-offline .topbar-logo {
+	width: 76px;
+	height: 30px;
+	background: url(../../images/login-hichina.png) no-repeat;
+	float: left
+}
+
+.n-topbar-offline .topbar-tit {
+	width: 120px;
+	height: 25px;
+	border-left: 1px solid #FFF;
+	line-height: 25px;
+	margin-left: 90px;
+	font-size: 16px;
+	text-align: right;
+	margin-top: 3px;
+	color: #FFF;
+	font-weight: normal
+}
+
+.n-topbar-offline .topbar-login-info {
+	float: right;
+	font-size: 12px;
+	color: #FFF;
+	margin-top: 20px
+}
+
+.n-topbar-offline .topbar-login-info a {
+	color: #FFF;
+	text-decoration: none
+}
+
+.n-topbar-offline .blank-spacing {
+	width: 1px;
+	height: 10px;
+	display: inline-block;
+	background: #FFF;
+	border: 0;
+	margin: 0 10px;
+	vertical-align: -1px
+}/*!
+nav style
+ */.n-nav-bg {
+	border-bottom: 1px solid #ddd;
+	box-shadow: 2px 0px 5px #f8f8f8;
+	-webkit-box-shadow: 2px 0px 5px #f8f8f8;
+	-moz-box-shadow: 2px 0px 5px #f8f8f8
+}
+
+.n-nav-bg .n-nav {
+	height: 53px
+}
+
+.n-nav-bg .n-nav .n-nav-list {
+	float: left
+}
+
+.n-nav-bg .n-nav .n-nav-list dt {
+	float: left;
+	height: 53px;
+	line-height: 52px;
+	padding-right: 20px;
+	color: #b6b6b6;
+	font-size: 18px
+}
+
+.n-nav-bg .n-nav .n-nav-list dt a {
+	color: #b6b6b6
+}
+
+.n-nav-bg .n-nav .n-nav-list dt a:hover {
+	text-decoration: none
+}
+
+.n-nav-bg .n-nav .n-nav-list dd {
+	float: left
+}
+
+.n-nav-bg .n-nav .n-nav-list dd a {
+	float: left;
+	height: 52px;
+	line-height: 52px;
+	padding: 0 10px;
+	margin: 0 0 -1px 26px;
+	color: #333;
+	text-decoration: none;
+	font-size: 14px
+}
+
+.n-nav-bg .n-nav .n-nav-list dd a:hover {
+	color: #c60019;
+	text-decoration: none
+}
+
+.n-nav-bg .n-nav .n-nav-list dd a.active {
+	border-bottom: 2px solid #c60019;
+	color: #c60019;
+	text-decoration: none
+}
+
+
+
+
+/*!
+footer style
+ */
+.n-foot {
+	border-top: 1px solid #e5e5e5
+}
+
+.n-foot .n-foot-text {
+	height: 78px;
+	line-height: 78px;
+	font-size: 12px;
+	color: #999;
+	text-align: center
+}
+
+.n-foot .n-foot-text .n-symbol-c {
+	font-size: 18px;
+	position: relative;
+	top: 4px;
+	margin: 0 4px
+}

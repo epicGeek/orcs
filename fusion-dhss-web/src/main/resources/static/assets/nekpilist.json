@@ -1,0 +1,13 @@
+{
+    "result":[
+      {"kpiid":"1","kpiname":"閴存潈璇锋眰鎴愬姛鐜囷細","kpivalue":"98.06","kpiunit":"%","date":"2015-05-28 14:00:00"},
+      {"kpiid":"2","kpiname":"璇煶鍛煎彨鏌ヨ鎴愬姛鐜囷細","kpivalue":"96.35","kpiunit":"%","date":"2015-05-28 14:00:00"},
+      {"kpiid":"3","kpiname":"鐭俊琚彨鏌ヨ鎴愬姛鐜囷細","kpivalue":"94.68","kpiunit":"%","date":"2015-05-28 14:00:00"},
+      {"kpiid":"4","kpiname":"浣嶇疆鏇存柊鎴愬姛鐜囷細","kpivalue":"98.51","kpiunit":"%","date":"2015-05-28 14:00:00"},
+      {"kpiid":"5","kpiname":"GPRS闄勭潃鎴愬姛鐜囷細","kpivalue":"89.77","kpiunit":"%","date":"2015-05-28 14:00:00"},
+      {"kpiid":"6","kpiname":"LTE浣嶇疆鏇存柊鎴愬姛鐜囷細","kpivalue":"99.95","kpiunit":"%","date":"2015-05-28 14:00:00"},
+      {"kpiid":"7","kpiname":"LTE鐢ㄦ埛閴存潈鎴愬姛鐜囷細","kpivalue":"99.49","kpiunit":"%","date":"2015-05-28 14:00:00"},
+      {"kpiid":"8","kpiname":"MAP-CancelLocation璇锋眰娆℃暟锛�","kpivalue":"2193408","kpiunit":"涓�","date":"2015-05-28 14:00:00"},
+      {"kpiid":"9","kpiname":"S6A-CancelLocation璇锋眰娆℃暟锛�","kpivalue":"578540","kpiunit":"涓�","date":"2015-05-28 14:00:00"}
+    ]
+}

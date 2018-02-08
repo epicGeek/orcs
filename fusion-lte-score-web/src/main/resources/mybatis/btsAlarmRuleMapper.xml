@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.nokia.ices.apps.fusion.score.repository.BtsAlarmScoreRepository">
+
+	<!--基站性能告警规则— —基站告警得分配置 -->
+	<select id="findAlarmScoreAll" parameterType="map" resultType="map"
+		flushCache="true">
+			SELECT
+			    ta1.id,
+				ta1.score_rule_1,
+			    ta1.score_rule_2,
+	            ta1.score_rule_3,
+				ta1.score_rule_4
+			FROM
+				ices_delay_score_rule ta1
+				
+		 ORDER BY ta1.id DESC
+		<!-- 分页 -->
+		<if test="pageSize !='' and pageSize !=null">
+			LIMIT ${pageSize} OFFSET ${page}
+		</if>
+	</select>
+	
+	<select id="findAlarmScoreCount" parameterType="map" resultType="Integer"
+		flushCache="true">
+
+		SELECT 
+			count(1)  from ices_delay_score_rule
+	</select>
+	
+	<!-- 修改 -->
+	<update id="alarmScoreRuleEdit" parameterType="map">
+		UPDATE ices_delay_score_rule
+		SET 
+		    score_rule_1 = #{score_rule_1},
+		    score_rule_2 = #{score_rule_2},
+		    score_rule_3 = #{score_rule_3},
+		    score_rule_4 = #{score_rule_4}
+		WHERE  id =#{id}
+	</update>
+	
+	<!-- <insert id="batchAdd" parameterType="java.util.List">
+		INSERT INTO ices_emos_alarm_rule
+			(alarm_no,alarm_title,alarm_desc,alarm_type,ta1.alarm_level,rule_1,rule_2,rule_3,rule_4)
+		values
+		<foreach collection="list" item="map" index="index" separator="," >
+			(#{map.alarm_no},#{map.alarm_title},#{map.alarm_desc},#{map.alarm_type},#{map.alarm_level},#{map.rule_1},#{map.rule_2},#{map.rule_3},#{map.rule_4})
+    	</foreach>
+		
+	</insert>
+ 	
+	<delete id="batchDelete" parameterType="java.util.List">
+		DELETE FROM cdr_cg_v3 WHERE name IN 
+		<foreach collection="list" index="index" item="map" open="(" separator="," close=")"> 
+		   #{map.neName}
+    	</foreach>
+	</delete> -->
+
+</mapper>	
+	

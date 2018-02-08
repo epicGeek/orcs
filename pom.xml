@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.nokia</groupId>
+	<artifactId>fusion-all</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<properties>
+		<spring-boot.version>1.2.7.RELEASE</spring-boot.version>
+		<shiro.version>1.2.4</shiro.version>
+		<postgresql.driver.version>9.4-1201-jdbc41</postgresql.driver.version>
+		<mysql.driver.version>5.1.37</mysql.driver.version>
+		<commons-lang3.version>3.4</commons-lang3.version>
+		<commons-codec.version>1.10</commons-codec.version>
+		<commons-io.version>2.4</commons-io.version>
+		<commons-beanutils.version>1.9.2</commons-beanutils.version>
+		<google.guava.version>18.0</google.guava.version>
+		<junit.version>4.12</junit.version>
+		<activemq.version>5.11.1</activemq.version>
+		<jsch.version>0.1.53</jsch.version>
+	</properties>
+	<!-- <distributionManagement> <repository> <id>releases</id> <name>Internal 
+		Releases</name> <url>http://svnserver/nexus/content/repositories/releases/</url> 
+		</repository> <snapshotRepository> <id>snapshots</id> <name>Internal Snapshots</name> 
+		<url>http://svnserver/nexus/content/repositories/snapshots/</url> </snapshotRepository> 
+		</distributionManagement> <repositories> <repository> <id>nexus</id> <url>http://svnserver/nexus/content/groups/public/</url> 
+		<releases> <enabled>true</enabled> </releases> <snapshots> <enabled>true</enabled> 
+		</snapshots> </repository> </repositories> <pluginRepositories> <pluginRepository> 
+		<id>nexus</id> <url>http://svnserver/nexus/content/groups/public/</url> <releases> 
+		<enabled>true</enabled> </releases> <snapshots> <enabled>true</enabled> </snapshots> 
+		</pluginRepository> </pluginRepositories> -->
+
+<!-- 
+
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>Internal-Releases</name>
+			<url>http://svnserver/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>Internal-Snapshots</name>
+			<url>http://svnserver/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+ -->
+	
+	<repositories>
+		<repository>
+			<id>oschina</id>
+			<url>http://svnserver/nexus/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>oschina</id>
+			<url>http://svnserver/nexus/content/groups/public/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+	
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.1</version>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
+					</configuration>
+				</plugin>
+				<!-- install时跳过测试 -->
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<modules>
+		<module>ices-core</module>
+		<module>fusion-dhss-config</module>
+		<module>fusion-dhss-web</module>
+		<module>fusion-dhss-system</module>
+		<module>fusion-dhss-interface-jms</module>
+		
+		<module>fusion-dhss-onekey-backup</module>
+		<module>fusion-dhss-node-switching</module>
+		<module>fusion-dhss-node-isolation</module>
+		<module>fusion-dhss-volte-auto</module>
+		<module>fusion-dhss-interface-websocket</module>
+		<module>fusion-dhss-business-subtool</module>
+		<module>fusion-dhss-business-command</module>
+		<module>fusion-dhss-business-boss</module>
+		<module>fusion-dhss-business-boss-rev</module>
+		<module>fusion-dhss-business-console</module>
+		<module>fusion-dhss-business-userdata</module>
+		<module>fusion-dhss-business-ne</module>
+		<module>fusion-dhss-interface-webservice</module>
+		<module>fusion-dhss-business-maintain</module>
+		<module>ices-jpa-based-module-deps</module>
+		<module>ices-mybatis-based-module-deps</module>
+		<module>fusion-dhss-business-patrol</module>
+		<module>fusion-dhss-task-patrol</module>
+		<module>fusion-dhss-task-ems</module>
+		<!-- <module>fusion-lte-score-web</module> <module>fusion-dhss-business-patrol</module> 
+			<module>fusion-dhss-task-clearData</module> <module>fusion-dhss-task-neLog</module> 
+			<module>fusion-dhss-task-preBoss</module> -->
+		<module>fusion-dhss-system-domain</module>
+		<module>fusion-dhss-business-domain</module>
+		<module>fusion-dhss-business-ems</module>
+		<module>fusion-dhss-business-volte</module>
+		<module>fusion-dhss-business-ems-domain</module>
+		<module>ices-jdbc-based-module-deps</module>
+		<module>fusion-dhss-business-quota</module>
+		<module>fusion-dhss-business-alarm</module>
+		<module>fusion-dhss-business-topology</module>
+		<!-- <module>fusion-dhss-business-threshold</module> -->
+	</modules>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.2.7.RELEASE</version>
+	</parent>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-web</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-spring</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-ehcache</artifactId>
+				<version>${shiro.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>${commons-lang3.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+				<version>${commons-codec.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>${commons-io.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>${commons-beanutils.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.postgresql</groupId>
+				<artifactId>postgresql</artifactId>
+				<version>${postgresql.driver.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.driver.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${google.guava.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-databind</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-annotations</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.module</groupId>
+				<artifactId>jackson-module-jaxb-annotaitons</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.activemq</groupId>
+				<artifactId>activemq-broker</artifactId>
+				<version>${activemq.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.activemq</groupId>
+				<artifactId>activemq-pool</artifactId>
+				<version>${activemq.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.jcraft</groupId>
+				<artifactId>jsch</artifactId>
+				<version>${jsch.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<scm>
+		<url>scm:svn:http://svnserver/svn/icesroot/sourceCode/CS/dhlr-fusion/fusion-all/trunk</url>
+		<developerConnection>scm:svn:http://svnserver/svn/icesroot/sourceCode/CS/dhlr-fusion/fusion-all/branches</developerConnection>
+		<tag>scm:svn:http://svnserver/svn/icesroot/sourceCode/CS/dhlr-fusion/fusion-all/tags</tag>
+	</scm>
+</project>

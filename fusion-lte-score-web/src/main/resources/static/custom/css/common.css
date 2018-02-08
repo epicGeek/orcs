@@ -1,0 +1,135 @@
+body{
+	background: #E8EBF0;
+}
+/*导航样式修改*/
+div.navbar{
+	/*background: #428BCA;*/
+	background: #1993C7;
+	color: #FFF;
+}
+div.navbar-inverse{
+	border-color: #949494;
+}
+div.navbar-inverse .navbar-nav > li > a{
+	color: #FFF;
+}
+div.navbar-inverse .navbar-brand{
+	color:#fff;
+}
+
+/*路径导航*/
+.breadcrumb:after {
+	content:".";
+	display:block;
+	height:0;
+	clear:both;
+	visibility:hidden;
+}
+.breadcrumb{
+	display: block;
+	*display:inline-block;
+}
+.breadcrumb li{
+	float:left;
+}
+
+/*修改图标间距*/
+.glyphicon{
+	margin-right: 3px;
+	margin-left: 3px;
+}
+/*修改NAV样式*/
+.navbar{
+	background: #2F343B;
+	color: #FFF;
+}
+.navbar-default .navbar-nav > .active > a{
+	background: #0465C9;
+}
+.navbar-collapse, .collapse{
+	color: #FFF;
+}
+.navbar-brand img{
+	height: 20px;
+}
+.navbar-right .img-circle{
+	height: 40px;
+	width: 40px;
+}
+
+/*修改container*/
+.container-fluid{
+	margin-left: 15px;
+}
+
+/*修改table样式*/
+table.dataTable{
+	border:none;
+}
+table.dataTable thead > tr > th,.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td{
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	border-left:none;
+	border-right:none;
+}
+			
+/*修改panel样式*/
+.panel-group{
+	background: #FFF;
+}
+.panel{
+	border-radius: 2px;
+}
+.navbar-collapse, .collapse{
+	color: #333;
+}
+.panel-control{
+	height: 100%;
+	position: relative;
+	float: right;
+	padding: 0 15px;
+}
+
+/*自定义样式*/
+.navbar-nav > li > a.userInfo{
+	position: relative;
+	display: inline-block;
+	padding-left: 35px;
+}
+.nav-icon-wrap {
+	position: absolute;
+	display: inline-block;
+	text-align: center;
+	width: 30px;
+	height: 30px;
+	line-height: 30px;
+	left: 0px;
+	top: 12px;
+	
+}
+.icon-circle{
+	border-radius: 50%;
+}
+.queryCondition{
+	line-height: 30px;	
+}
+.editIcon{
+	color: #449D44;
+}
+.deleteIcon{
+	color: #D84C29;
+}
+a.aLink{
+	display: inline-block;
+	border-radius: 4px;
+	text-align: center;
+	min-width: 18px;
+	font-size: 12px;
+	cursor: pointer;
+}
+a.aLink:hover{
+	background: #D84C29;
+	color: #FFF;
+}

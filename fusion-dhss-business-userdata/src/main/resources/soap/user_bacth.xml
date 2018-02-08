@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<userBacth>
+
+
+	<imsi path='/objects/auc/imsi' />
+	
+	<vlrNumber path='/objects/hlr/vlrMobData/isdnNumberOfVLR' />
+	
+	<registrationStatus path='/objects/hss/implicitRegisteredSet/registrationStatus' />
+	
+	<scscfSipAddress path='/objects/hss/scscfSipAddress' />
+	
+	<roamingProfile path='/objects/hlr/rr' />
+	
+	<operatorServiceName path='/objects/hlr/tcsi/operatorServiceName' />
+	
+	<tcsiState path='/objects/hlr/tcsi/csiState' />
+
+	<epsPdnContext path='/objects/hlr/epsPdnContext'>
+		<element>apn</element>
+		<element>ipv4Address</element>
+	</epsPdnContext>
+
+	<pdpContext path='/objects/hlr/pdpContext'>
+		<element>apn</element>
+		<element>address</element>
+	</pdpContext>
+
+	<cfd path='/objects/hlr/cfd'>
+		<element>isdnNumber</element>
+		<element>status</element>
+		<include property='basicServiceGroup'>TS10-telephony</include>
+	</cfd>
+
+	<cfu path='/objects/hlr/cfu'>
+		<element>isdnNumber</element>
+		<element valueDes='4:NITEST'>status</element>
+		<include property='basicServiceGroup'>TS10-telephony</include>
+	</cfu>
+
+	<cfb path='/objects/hlr/cfb'>
+		<element>isdnNumber</element>
+		<element>status</element>
+		<include property='basicServiceGroup'>TS10-telephony</include>
+	</cfb>
+
+	<cfnrc path='/objects/hlr/cfnrc'>
+		<element>isdnNumber</element>
+		<element>status</element>
+		<include property='basicServiceGroup'>TS10-telephony</include>
+	</cfnrc>
+
+	<cfnry path='/objects/hlr/cfnry'>
+		<element>isdnNumber</element>
+		<element>status</element>
+		<include property='basicServiceGroup'>TS10-telephony</include>
+	</cfnry>
+
+
+</userBacth>

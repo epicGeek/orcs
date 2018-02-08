@@ -1,0 +1,1 @@
+rsync -ave "ssh" --delete --include=="",--exclude=="/*" oamsys@172.16.73.52:/var/log/NPM/  /home/boss_revolution/rsync-data/soap52/

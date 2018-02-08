@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.nokia.ices.apps.fusion.score.repository.BtsSummaryScoreRepository">
+
+	<!-- 基站汇总评分 -->
+	
+	<!-- 日评分 -->
+	<select id="findBtsSumAll" parameterType="map" resultType="map" flushCache="true">
+	
+		SELECT
+			${title}
+		FROM
+			${tableName} ta1
+		WHERE
+			1 = 1
+
+        <if test="neCode !='' and neCode!=null" >
+		     AND  ta1.ne_code = #{neCode} 
+	    </if>
+	    <if test="cityCode !='' and cityCode !=null" >
+		     AND  ta1.city_code = #{cityCode} 
+	    </if>
+	    <if test="areaCode !='' and areaCode!=null" >
+		     AND  ta1.area_code in( ${areaCode}) 
+	    </if>
+	    <if test="grade !='' and grade !=null" >
+		     AND  ta1.grade = #{grade} 
+	    </if>
+	   <!--  <if test="startTotalScore !='' and startTotalScore" >
+		     AND  ta1.total_score >= #{startTotalScore} 
+	    </if>
+	    <if test="endTotalScore !='' and endTotalScore" >
+	         <![CDATA[ 
+		      AND  ta1.total_score <= #{endTotalScore} 
+		     ]]>
+	    </if> -->
+	    
+	    <if test="curWeek !='' and curWeek != null">
+				AND ta1.cycle_week_first = #{curWeek}
+		</if>
+		<if test="curMonth !='' and curMonth != null">
+			AND ta1.cycle_month_first = #{curMonth}
+		</if>
+		<if test="monthStart !='' and monthStart != null">
+		  <![CDATA[ AND ta1.cycle_month_first >= #{monthStart} ]]>
+		</if>
+		<if test="monthEnd !='' and monthEnd != null">
+		  <![CDATA[ AND ta1.cycle_month_first <= #{monthEnd} ]]>
+		</if>
+		<if test="weekStart !='' and weekStart != null">
+		  <![CDATA[ AND ta1.cycle_week_first >= #{weekStart} ]]>
+		</if>
+		<if test="weekEnd !='' and weekEnd != null">
+		  <![CDATA[ AND ta1.cycle_week_first <= #{weekEnd} ]]>
+		</if>
+		
+		<choose>
+			<when test="tableName == 'bts_score_day'">
+				<if test="curDate !='' and curDate != null">
+					AND ta1.cycle_date = #{curDate}
+				</if>
+				<if test="startDate !='' and startDate != null">
+		  			  <![CDATA[ AND ta1.cycle_date >= #{startDate} ]]>
+				</if>
+				<if test="endDate !='' and endDate != null">
+        			  <![CDATA[  AND  ta1.cycle_date <= #{endDate} ]]>
+				</if>
+			</when>
+		</choose>
+	        ORDER BY ${orderBy} DESC
+	    <!-- 分页 -->
+	    <if test="pageSize !='' and pageSize !=null" >
+                LIMIT ${pageSize} OFFSET ${page}
+		</if>
+	    
+	</select>
+	
+	<select id="findBtsSumCount" parameterType="map" resultType="Integer" flushCache="true">
+	
+		SELECT
+			count(1)
+		FROM
+			${tableName} ta1
+		WHERE
+			1 = 1
+
+        <if test="neCode !='' and neCode!=null" >
+		     AND  ta1.ne_code = #{neCode} 
+	    </if>
+	    <if test="cityCode !='' and cityCode !=null" >
+		     AND  ta1.city_code = #{cityCode} 
+	    </if>
+	    <if test="areaCode !='' and areaCode!=null" >
+		     AND  ta1.area_code in( ${areaCode}) 
+	    </if>
+	    <if test="grade !='' and grade !=null" >
+		     AND  ta1.grade = #{grade} 
+	    </if>
+	    <!-- <if test="startTotalScore !='' and startTotalScore" >
+		     AND  ta1.total_score >= #{startTotalScore} 
+	    </if>
+	     <if test="endTotalScore !='' and endTotalScore" >
+	         <![CDATA[ 
+		      AND  ta1.total_score <= #{endTotalScore} 
+		     ]]>
+	    </if> -->
+	    <if test="curWeek !='' and curWeek != null">
+				AND ta1.cycle_week_first = #{curWeek}
+		</if>
+		<if test="curMonth !='' and curMonth != null">
+			AND ta1.cycle_month_first = #{curMonth}
+		</if>
+		<if test="monthStart !='' and monthStart != null">
+		  <![CDATA[ AND ta1.cycle_month_first >= #{monthStart} ]]>
+		</if>
+		<if test="monthEnd !='' and monthEnd != null">
+		  <![CDATA[ AND ta1.cycle_month_first <= #{monthEnd} ]]>
+		</if>
+		<if test="weekStart !='' and weekStart != null">
+		  <![CDATA[ AND ta1.cycle_week_first >= #{weekStart} ]]>
+		</if>
+		<if test="weekEnd !='' and weekEnd != null">
+		  <![CDATA[ AND ta1.cycle_week_first <= #{weekEnd} ]]>
+		</if>
+		
+		<choose>
+			<when test="tableName == 'bts_score_day'">
+				<if test="curDate !='' and curDate != null">
+					AND ta1.cycle_date = #{curDate}
+				</if>
+				<if test="startDate !='' and startDate != null">
+		  			  <![CDATA[ AND ta1.cycle_date >= #{startDate} ]]>
+				</if>
+				<if test="endDate !='' and endDate != null">
+        			  <![CDATA[  AND  ta1.cycle_date <= #{endDate} ]]>
+				</if>
+			</when>
+		</choose>
+		    
+  </select>    
+	<!-- =====================汇总图形 ========================== -->    
+  <select id="findBtsSumChart" parameterType="map" resultType="map" flushCache="true">
+
+		SELECT
+			 ${title}
+		FROM
+			${tableName} ta1
+		WHERE
+			1 = 1
+
+        <if test="neCode !='' and neCode!=null" >
+		     AND  ta1.ne_code = #{neCode} 
+	    </if>
+		<choose>
+			<when test="tableName == 'bts_score_day'">
+				<if test="sumStartDate !='' and sumStartDate != null">
+		  			  <![CDATA[ AND ta1.cycle_date >= #{sumStartDate} ]]>
+				</if>
+				<if test="sumEndDate !='' and sumEndDate != null">
+        			  <![CDATA[  AND  ta1.cycle_date <= #{sumEndDate} ]]>
+				</if>
+				<if test="sumStartDate == '' or sumStartDate == null and sumEndDate == '' or sumEndDate == null">
+				   <![CDATA[ 
+						AND ta1.cycle_date >= DATE_ADD(CURRENT_DATE(),INTERVAL -20 DAY)
+						AND ta1.cycle_date < CURRENT_DATE()
+					]]>
+				</if>
+			</when>
+			<when test="tableName == 'bts_score_week'">
+			    <if test="sumStartDate !='' and sumStartDate != null">
+		  			  <![CDATA[ AND ta1.cycle_week_first >= date_format(date_sub(date_sub( #{sumStartDate},INTERVAL WEEKDAY( #{sumStartDate}) DAY),INTERVAL 0 WEEK),'%Y-%m-%d') ]]>
+				</if> 
+				<if test="sumEndDate !='' and sumEndDate != null">
+        			  <![CDATA[  AND  ta1.cycle_week_first <= #{sumEndDate} ]]>
+				</if>
+				<if test="sumStartDate == '' or sumStartDate == null and sumEndDate == '' or sumEndDate == null">
+				   <![CDATA[ 
+						AND ta1.cycle_week_first >= date_format(date_sub(date_sub(now(),INTERVAL WEEKDAY(NOW()) DAY),INTERVAL 20 WEEK),'%Y-%m-%d')
+						AND ta1.cycle_week_first < CURRENT_DATE()
+					]]>
+				</if>
+			</when>
+			<when test="tableName == 'bts_score_month'">
+			     <if test="sumStartDate !='' and sumStartDate != null">
+		  			  <![CDATA[ AND ta1.cycle_month_first >= #{sumStartDate} ]]>
+				</if>
+				<if test="sumEndDate !='' and sumEndDate != null">
+        			  <![CDATA[  AND  ta1.cycle_month_first <= #{sumEndDate} ]]>
+				</if>
+				<if test="sumStartDate == '' or sumStartDate == null and sumEndDate == '' or sumEndDate == null">
+				   <![CDATA[ 
+						AND ta1.cycle_month_first > DATE_ADD(CURRENT_DATE(),INTERVAL -12 MONTH)
+						AND ta1.cycle_month_first < CURRENT_DATE()
+					]]>
+				</if>
+			</when>
+			<otherwise></otherwise>
+		</choose>
+				<!-- ORDER BY ta1.cycle_month_first ASC; -->
+	         ORDER BY ${orderBy} ASC 
+	
+	</select>
+	
+</mapper>	
+	
+	
+
+	
+	
+

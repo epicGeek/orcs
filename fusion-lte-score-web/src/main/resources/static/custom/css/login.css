@@ -1,0 +1,246 @@
+html,
+body {
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+	height: 100%;
+}
+/*login.html - start*/
+
+@keyframes imgAni {
+	0% {
+		left: -100%;
+	}
+	100% {
+		left: 0;
+	}
+}
+@-moz-keyframes imgAni {
+	0% {
+		left: -100%;
+	}
+	100% {
+		left: 0;
+	}
+}
+@-webkit-keyframes imgAni {
+	0% {
+		left: -100%;
+	}
+	100% {
+		left: 0;
+	}
+}
+@-ms-keyframes imgAni {
+	0% {
+		left: -100%;
+	}
+	100% {
+		left: 0;
+	}
+}
+@keyframes loginAni {
+	0% {
+		left: 150%;
+	}
+	100% {
+		left: 0;
+	}
+}
+@-moz-keyframes loginAni {
+	0% {
+		left: 150%;
+	}
+	100% {
+		left: 0;
+	}
+}
+@-webkit-keyframes loginAni {
+	0% {
+		left: 150%;
+	}
+	100% {
+		left: 0;
+	}
+}
+@-ms-keyframes loginAni {
+	0% {
+		left: 150%;
+	}
+	100% {
+		left: 0;
+	}
+}
+body.loginBody {
+	background: url(../images/loginBg.png) center center;
+	background-size: 100%;
+	font-family: "Microsoft Yahei", Verdana, Arial, Tahoma;
+	color: #fff;
+	width: 100%;
+	height: 100%;
+}
+.loginBody .logo {
+	margin: 20px 0px 10px;
+}
+.loginWrap {
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: 100% auto;
+	background: rgba(0, 0, 0, .7);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#B2000000,endColorstr=#B2000000);
+	padding: 20px;
+	overflow: hidden;
+	position: fixed;
+	bottom: 0px;
+	width: 100%;
+	height: 60%;
+	min-height: 380px;
+	color: #fff;
+}
+.loginWrap .form-control {
+	background: transparent;
+}
+.tipImg {
+	position: relative;
+	margin-top: 10px;
+}
+.tipImg img {
+	position: relative;
+	width: 300px;
+	height: 300px;
+	border: 5px solid rgba(255, 255, 255, 0.3);
+	left: -100%;
+	left: 0px\0;
+	*left: 0;
+	-moz-animation: 1s ease-in-out 0s normal forwards 1 imgAni;
+	-webkit-animation: 1s ease-in-out 0s normal forwards 1 imgAni;
+	-ms-animation: 1s ease-in-out 0s normal forwards 1 imgAni;
+	animation: 1s ease-in-out 0s normal forwards 1 imgAni;
+}
+.loginContentWrap {
+	position: relative;
+	margin-top: 10px;
+}
+.loginContent {
+	width: 360px;
+	position: relative;
+	left: 150%;
+	left: 0px\0;
+	*left: 0;
+	-moz-animation: .8s ease-in-out .2s normal forwards 1 loginAni;
+	-webkit-animation: .8s ease-in-out .2s normal forwards 1 loginAni;
+	-ms-animation: .8s ease-in-out 0.2s normal forwards 1 loginAni;
+	animation: .8s ease-in-out 0.2s normal forwards 1 loginAni;
+	/* color: #0662a6;*/
+	color: #fff;
+}
+.loginContent .loginLabel {
+	line-height: 34px;
+}
+.loginContent .checkbox {
+	padding-left: 10px;
+}
+@media ( max-width: 768px) {
+	.loginWrap {
+		background: url(../images/net-image-ourbusinesses.jpg);
+		background-repeat: no-repeat;
+		background-position: center center;
+		background-size: auto 100%;
+	}
+	.loginContent {
+		width: auto;
+	}
+	.tipImg img {
+		position: relative;
+		width: 48px;
+		height: 48px;
+	}
+}
+.dividerLine {
+	/*border-bottom: 1px solid #E6EAF5;*/
+	/*border-top: 1px solid #7390BF;*/
+	
+	border-bottom: 1px solid #5786ab;
+	border-top: 1px solid #555876;
+	overflow: hidden;
+	height: 0px;
+	margin: 10px 0;
+}
+/*login.html - end*/
+
+.button {
+	color: #FFFFFF;
+	background-color: #FFFFFF;
+	border-color: #FFFFFF;
+	font-weight: 300;
+	font-size: 16px;
+	font-family: "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+	text-decoration: none;
+	text-align: center;
+	line-height: 40px;
+	height: 40px;
+	padding: 0 40px;
+	margin: 0;
+	display: inline-block;
+	appearance: none;
+	cursor: pointer;
+	border: solid 2px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-webkit-transition-property: all;
+	transition-property: all;
+	-webkit-transition-duration: .3s;
+	transition-duration: .3s;
+	/*
+    * Disabled State
+    *
+    * The disabled state uses the class .disabled, is-disabled,
+    * and the form attribute disabled="disabled".
+    * The use of !important is only added because this is a state
+    * that must be applied to all buttons when in a disabled state.
+    */
+}
+.button:visited {
+	color: #ffffff;
+}
+.button:hover,
+.button:focus {
+	background-color: #f6f6f6;
+	border: solid 2px #f6f6f6;
+	text-decoration: none;
+	outline: none;
+	color: #0662a6;
+}
+/*.button:active, .button.active, .button.is-active {
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+    text-decoration: none;
+    background-color: #eeeeee;
+    border-color: #cfcfcf;
+    color: #d4d4d4;
+    -webkit-transition-duration: 0s;
+    transition-duration: 0s;
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2); }*/
+/*
+* Border Buttons
+*/
+
+.button-border {
+	background: none;
+	border-width: 2px;
+	border-style: solid;
+	line-height: 36px;
+}
+.button-border:hover {
+	background-color: rgba(255, 255, 255, 0.9);
+}
+.button-border:active {
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	text-shadow: none;
+	-webkit-transition-property: all;
+	transition-property: all;
+	-webkit-transition-duration: .3s;
+	transition-duration: .3s;
+}

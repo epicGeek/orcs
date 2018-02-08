@@ -1,0 +1,782 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.nokia.ices.apps.fusion.score.repository.BtsScoreHourRepository">
+
+    <select id="getKpiValueData" parameterType="map" resultType="map" flushCache="true">
+         SELECT ne_code,cell_id,cell_name_cn,kpi_001_value,kpi_002_value,kpi_003_value,kpi_004_value,kpi_005_value,
+         kpi_006_value,kpi_007_value,kpi_008_value,kpi_009_value,kpi_010_value,kpi_011_value FROM cell_kpi_data WHERE 1=1 
+            
+        <if test="neCode !='' and neCode!=null">
+		      AND ne_code = #{neCode}
+		</if>
+		<if test="cycle!='' and cycle!=null">
+			  AND cycle = #{cycle}
+		</if>
+    </select>
+
+	<!-- 基站评分 -->
+	<select id="findBtsHourAll" parameterType="map" resultType="map" flushCache="false">
+	
+	 <choose>
+	    <when test="startYear==endYear">
+				SELECT
+					ta1.city_name,ta1.area_name,ta1.ne_code,ta1.ne_name_cn,${kpiValue},ta1.grade,ta1.total_score,
+					cast(ta1.manufacturer as char) as manufacturer,ta1.area_code,ta1.city_code,
+					DATE_FORMAT(ta1.cycle, '%Y-%m-%d %H:%i:%s')AS cycle,
+					DATE_FORMAT(ta1.cycle_date, '%Y-%m-%d')AS cycleDate,
+					ta1.cycle_week,ta1.cycle_month,ta1.cycle_year,ta1.cycle_week_first,ta1.cycle_week_end,ta1.cycle_month_first
+				FROM
+					${tableName} ta1 WHERE ${where}
+				<if test="neCode !='' and neCode!=null">
+					AND ta1.ne_code = #{neCode}
+				</if>
+				<if test="cityCode !='' and cityCode !=null">
+					AND ta1.city_code = #{cityCode}
+				</if>
+				<if test="areaCode !='' and areaCode!=null">
+					AND ta1.area_code in( ${areaCode})
+				</if>
+				<if test="grade !='' and grade !=null">
+					AND ta1.grade = #{grade}
+				</if>
+				<if test="startYear  !='' and  startYear !=null">
+					AND  ta1.cycle_year_of_week =#{startYear}
+				</if>
+				<if test="startDate  !='' and  startDate !=null">
+					AND  ta1.${column} >=#{startDate}
+				</if>
+				<if test="endDate  !='' and endDate !=null">
+					<![CDATA[ AND  ta1.${column} <= #{endDate} ]]>
+				</if>
+				GROUP BY ta1.ne_code,
+				<choose>
+				<!-- 一周中，同一基站等级为1的，超过3次再显示 -->
+				    <when test="tableName=='bts_score_day' and tjType==3">
+				       ta1.cycle_week HAVING count(1) >= 3 ORDER BY ta1.cycle_week DESC
+				    </when>
+				    <otherwise>
+					   ta1.${column} ORDER BY ta1.${column} DESC
+				    </otherwise>
+				</choose>
+	    
+	    </when>
+	    
+	    <otherwise>
+	          SELECT a.* from  (SELECT
+					ta1.city_name,ta1.area_name,ta1.ne_code,ta1.ne_name_cn,${kpiValue},ta1.grade,ta1.total_score,
+					cast(ta1.manufacturer as char) as manufacturer,ta1.area_code,ta1.city_code,
+					DATE_FORMAT(ta1.cycle, '%Y-%m-%d %H:%i:%s')AS cycle,
+					DATE_FORMAT(ta1.cycle_date, '%Y-%m-%d')AS cycleDate,
+					ta1.cycle_week,ta1.cycle_month,ta1.cycle_year,ta1.cycle_week_first,ta1.cycle_week_end,ta1.cycle_month_first
+				FROM
+					${tableName} ta1 WHERE ${where}
+				<if test="neCode !='' and neCode!=null">
+					AND ta1.ne_code = #{neCode}
+				</if>
+				<if test="cityCode !='' and cityCode !=null">
+					AND ta1.city_code = #{cityCode}
+				</if>
+				<if test="areaCode !='' and areaCode!=null">
+					AND ta1.area_code in( ${areaCode})
+				</if>
+				<if test="grade !='' and grade !=null">
+					AND ta1.grade = #{grade}
+				</if>
+				<if test="startYear  !='' and  startYear !=null">
+					AND  ta1.cycle_year =#{startYear}
+				</if>
+				<if test="startDate  !='' and  startDate !=null">
+					AND  ta1.${column} >=#{startDate}
+				</if>
+                   UNION ALL
+                   
+                   SELECT
+					ta1.city_name,ta1.area_name,ta1.ne_code,ta1.ne_name_cn,${kpiValue},ta1.grade,ta1.total_score,
+					cast(ta1.manufacturer as char) as manufacturer,ta1.area_code,ta1.city_code,
+					DATE_FORMAT(ta1.cycle, '%Y-%m-%d %H:%i:%s')AS cycle,
+					DATE_FORMAT(ta1.cycle_date, '%Y-%m-%d')AS cycleDate,
+					ta1.cycle_week,ta1.cycle_month,ta1.cycle_year,ta1.cycle_week_first,ta1.cycle_week_end,ta1.cycle_month_first
+				FROM
+					${tableName} ta1 WHERE ${where}
+				<if test="neCode !='' and neCode!=null">
+					AND ta1.ne_code = #{neCode}
+				</if>
+				<if test="cityCode !='' and cityCode !=null">
+					AND ta1.city_code = #{cityCode}
+				</if>
+				<if test="areaCode !='' and areaCode!=null">
+					AND ta1.area_code in( ${areaCode})
+				</if>
+				<if test="grade !='' and grade !=null">
+					AND ta1.grade = #{grade}
+				</if>
+				<if test="endYear  !='' and  endYear !=null">
+					AND  ta1.cycle_year =#{endYear}
+				</if>
+				<if test="endDate  !='' and endDate !=null">
+					<![CDATA[ AND  ta1.${column} <= #{endDate} ]]>
+				</if>)a
+				GROUP BY a.ne_code,
+				<choose>
+				<!-- 一周中，同一基站等级为1的，超过3次再显示 -->
+				    <when test="tableName=='bts_score_day' and tjType==3">
+				       a.cycle_week HAVING count(1) >= 3 ORDER BY a.cycle_week DESC
+				    </when>
+				    <otherwise>
+					   a.${column} ORDER BY a.${column} DESC
+				    </otherwise>
+				</choose>
+	    </otherwise>
+	 </choose>
+	
+		<!-- 分页 -->
+		<if test="pageSize !='' and pageSize !=null">
+			LIMIT ${pageSize} OFFSET ${page}
+		</if>
+	</select>
+	
+	<select id="findBtsHourCount" parameterType="map" resultType="Integer"
+		flushCache="true">
+
+        <choose>
+		<!-- 一周中，同一基站等级为1的，超过3次再显示 -->
+		    <when test="tableName=='bts_score_day' and tjType==3">
+		    
+		       <if test="startYear==endYear">
+				       SELECT count(1) FROM (SELECT count(1) FROM bts_score_day ta1 WHERE ${where}
+						<if test="neCode !='' and neCode!=null">
+							AND ta1.ne_code = #{neCode}
+						</if>
+						<if test="cityCode !='' and cityCode !=null">
+							AND ta1.city_code = #{cityCode}
+						</if>
+						<if test="areaCode !='' and areaCode!=null">
+							AND ta1.area_code in( ${areaCode})
+						</if>
+						<if test="grade !='' and grade !=null">
+							AND ta1.grade = #{grade}
+						</if>
+						<if test="startYear  !='' and  startYear !=null">
+							AND  ta1.cycle_year =#{startYear}
+						</if>
+						<if test="startDate  !='' and  startDate !=null">
+							AND  ${column} >=#{startDate}
+						</if>
+						<if test="endDate  !='' and endDate !=null">
+							<![CDATA[ AND  ${column} <= #{endDate}   ]]>
+						</if>
+						GROUP BY
+							ne_code,
+							cycle_week
+						HAVING
+							count(1) >= 3)ta2
+		       
+		       </if>
+		       <if test="startYear != endYear">
+		               SELECT sum(con)as count FROM  (SELECT count(1)as con FROM (SELECT count(1) FROM bts_score_day ta1 WHERE ${where}
+						<if test="neCode !='' and neCode!=null">
+							AND ta1.ne_code = #{neCode}
+						</if>
+						<if test="cityCode !='' and cityCode !=null">
+							AND ta1.city_code = #{cityCode}
+						</if>
+						<if test="areaCode !='' and areaCode!=null">
+							AND ta1.area_code in( ${areaCode})
+						</if>
+						<if test="grade !='' and grade !=null">
+							AND ta1.grade = #{grade}
+						</if>
+						<if test="startYear  !='' and  startYear !=null">
+							AND  ta1.cycle_year =#{startYear}
+						</if>
+						<if test="startDate  !='' and  startDate !=null">
+							AND  ${column} >=#{startDate}
+						</if>
+						
+						GROUP BY
+							ne_code,
+							cycle_week
+						HAVING
+							count(1) >= 3)ta2						
+
+								UNION ALL
+							SELECT count(1)as con FROM (SELECT count(1) FROM bts_score_day ta1 WHERE ${where}
+						<if test="neCode !='' and neCode!=null">
+							AND ta1.ne_code = #{neCode}
+						</if>
+						<if test="cityCode !='' and cityCode !=null">
+							AND ta1.city_code = #{cityCode}
+						</if>
+						<if test="areaCode !='' and areaCode!=null">
+							AND ta1.area_code in( ${areaCode})
+						</if>
+						<if test="grade !='' and grade !=null">
+							AND ta1.grade = #{grade}
+						</if>
+						<if test="endYear  !='' and  endYear !=null">
+							AND  ta1.cycle_year =#{endYear}
+						</if>
+						<if test="endDate  !='' and endDate !=null">
+							<![CDATA[ AND  ${column} <= #{endDate}   ]]>
+						</if>
+						GROUP BY
+							ne_code,
+							cycle_week
+						HAVING
+							count(1) >= 3)ta2)a
+		       </if>
+		    </when>
+		    <otherwise>
+		    
+		        <if test="startYear==endYear">
+						SELECT count(1) from
+						(SELECT
+							DISTINCT ta1.${column},ta1.ne_code
+						FROM
+							${tableName} ta1 WHERE ${where}
+						
+						<if test="neCode !='' and neCode!=null">
+							AND ta1.ne_code = #{neCode}
+						</if>
+						<if test="cityCode !='' and cityCode !=null">
+							AND ta1.city_code = #{cityCode}
+						</if>
+						<if test="areaCode !='' and areaCode!=null">
+							AND ta1.area_code in( ${areaCode})
+						</if>
+						<if test="grade !='' and grade !=null">
+							AND ta1.grade = #{grade}
+						</if>
+						<if test="startYear  !='' and  startYear !=null">
+							AND  ta1.cycle_year =#{startYear}
+						</if>
+						<if test="startDate  !='' and  startDate !=null">
+							AND  ${column} >=#{startDate}
+						</if>
+						<if test="endDate  !='' and endDate !=null">
+							<![CDATA[ AND  ${column} <= #{endDate}   ]]>
+						</if>
+						)ta2
+		        
+		        </if>
+		        
+		         <if test="startYear != endYear">
+		                  SELECT sum(con)as count from(SELECT count(1)as con from
+						(SELECT
+							DISTINCT ta1.${column},ta1.ne_code
+						FROM
+							${tableName} ta1 WHERE ${where}
+						
+						<if test="neCode !='' and neCode!=null">
+							AND ta1.ne_code = #{neCode}
+						</if>
+						<if test="cityCode !='' and cityCode !=null">
+							AND ta1.city_code = #{cityCode}
+						</if>
+						<if test="areaCode !='' and areaCode!=null">
+							AND ta1.area_code in( ${areaCode})
+						</if>
+						<if test="grade !='' and grade !=null">
+							AND ta1.grade = #{grade}
+						</if>
+						<if test="startYear  !='' and  startYear !=null">
+							AND  ta1.cycle_year =#{startYear}
+						</if>
+						<if test="startDate  !='' and  startDate !=null">
+							AND  ${column} >=#{startDate}
+						</if>
+						)ta2
+						UNION ALL
+						
+						 SELECT count(1)as con from
+						(SELECT
+							DISTINCT ta1.${column},ta1.ne_code
+						FROM
+							${tableName} ta1 WHERE ${where}
+						
+						<if test="neCode !='' and neCode!=null">
+							AND ta1.ne_code = #{neCode}
+						</if>
+						<if test="cityCode !='' and cityCode !=null">
+							AND ta1.city_code = #{cityCode}
+						</if>
+						<if test="areaCode !='' and areaCode!=null">
+							AND ta1.area_code in( ${areaCode})
+						</if>
+						<if test="grade !='' and grade !=null">
+							AND ta1.grade = #{grade}
+						</if>
+						<if test="endYear  !='' and  endYear !=null">
+							AND  ta1.cycle_year =#{endYear}
+						</if>
+						<if test="endDate  !='' and  endDate !=null">
+							AND  ${column} >=#{endDate}
+						</if>
+						)ta2)a
+		         </if>
+		    </otherwise>
+		</choose>
+		
+		
+		
+		<!-- 一周中，同一基站等级为1的，超过3次再显示 -->
+	</select>
+<!-- ===============================基站健康度评分结束==============================-->	
+	<!-- 基站评分明细 -->
+	<select id="findByBtsHourCodeAll" parameterType="map"
+		resultType="map" flushCache="true">
+		SELECT
+			ta1.area_name,
+			ta1.city_name,
+			ta1.ne_code,
+			ta1.cell_id,
+			ta1.ne_name_cn,
+			ta1.cycle_hour,
+			ta1.cycle_date,
+			ta1.cell_name_cn,
+			ta1.total_score,
+		<foreach collection="list" index="index" item="tag" separator=",">
+			100-ta1.${tag} as #{tag}
+		</foreach>
+		,100+ta1.alarm_score alarm_score
+		FROM
+		bts_score_hour ta1
+		WHERE 1 = 1
+		<if test="neCode !='' and neCode!=null">
+			AND ta1.ne_code = #{neCode}
+		</if>
+		<if test="cycleDate !='' and cycleDate != null">
+			AND ta1.cycle_date = #{cycleDate}
+		</if>
+		<if test="cycleHour !='' and cycleHour!=null">
+			AND ta1.cycle_hour = #{cycleHour}
+		</if>
+		<if test="totalScore !='' and totalScore!=null">
+			AND ta1.total_score = #{totalScore}
+		</if>
+	</select>
+
+	<!-- 基站评分——图形指标  ??????????????????//////-->
+	<select id="findByBtsHourGraphicAll"  parameterType="map"  resultType="map"  flushCache="true">
+	
+		<choose>
+			<when test="tableName=='bts_score_week' ">
+			
+				<if test="startYear==endYear">
+					SELECT
+						ta1.ne_code,
+						ta1.ne_name_cn,
+						ta1.cycle_hour,
+						ta1.cycle,
+						ta1.cycle_date,
+						ta1.cycle_week,
+						ta1.cycle_year,
+						ta1.total_score
+					FROM
+						${tableName} ta1
+					WHERE 1 = 1
+					<if test="neCode !='' and neCode != null">
+						AND ta1.ne_code = #{neCode}
+					</if>
+					<if test="startDate !='' and startDate !=null">
+					  	  	AND  ta1.cycle_year =#{startYear}
+						  	AND  ta1.cycle_week >= #{startDate}
+			          	  <![CDATA[  AND  ta1.cycle_week <= #{endDate}  ]]>
+					</if> 
+						GROUP BY ta1.cycle_date
+						ORDER BY ta1.cycle_date ASC
+				</if>
+				
+				<if test="startYear != endYear">
+					SELECT a.*  from(
+						SELECT
+							ta1.ne_code,
+							ta1.ne_name_cn,
+							ta1.cycle_hour,
+							ta1.cycle,
+							ta1.cycle_date,
+							ta1.cycle_week,
+							ta1.cycle_year,
+							ta1.total_score
+						FROM
+							${tableName} ta1
+						WHERE 1 = 1
+						<if test="neCode !='' and neCode != null">
+							AND ta1.ne_code = #{neCode}
+						</if>
+						<if test="startDate !=''  and startDate !=null'">
+							AND  ta1.cycle_year >=#{startYear}
+						  	AND  ta1.cycle_week >= #{startDate}
+						</if> 
+					UNION ALL
+						SELECT
+							ta1.ne_code,
+							ta1.ne_name_cn,
+							ta1.cycle_hour,
+							ta1.cycle,
+							ta1.cycle_date,
+							ta1.cycle_week,
+							ta1.cycle_year,
+							ta1.total_score
+						FROM
+							${tableName} ta1
+						WHERE 1 = 1
+						<if test="neCode !='' and neCode != null">
+							AND ta1.ne_code = #{neCode}
+						</if>
+						<if test="endDate !=''  and  endDate !=null">
+							<![CDATA[ AND  ta1.cycle_year <=#{endYear}
+				         	 AND  ta1.cycle_week <= #{endDate}  ]]>
+						</if>)a
+					GROUP BY a.cycle_date
+					ORDER BY a.cycle_date ASC
+				</if>
+			</when>
+			<otherwise>
+				SELECT
+					ta1.ne_code,
+					ta1.ne_name_cn,
+					ta1.cycle_hour,
+					ta1.cycle,
+					ta1.cycle_date,
+					ta1.cycle_year,
+					ta1.cycle_week,
+					ta1.total_score
+				FROM
+					${tableName} ta1
+				WHERE 1 = 1
+				<if test="neCode !='' and neCode != null">
+					AND ta1.ne_code = #{neCode}
+				</if>
+				<!-- 默认查询20个小时的数据 -->
+				<if test="tableName== 'bts_score_hour' ">
+		               AND  ta1.cycle >= #{startDate}
+		          	   <![CDATA[  AND  ta1.cycle <= #{endDate}  ]]>
+				</if>
+				
+				<if test="tableName=='bts_score_day'">
+				  	  AND  ta1.cycle_date >= #{startDate}
+		          	  <![CDATA[  AND  ta1.cycle_date <= #{endDate}  ]]>
+				</if> 
+				GROUP BY ta1.cycle
+				ORDER BY ta1.cycle ASC
+			</otherwise>
+		</choose>
+		
+	</select>
+
+	<!-- ==========================指标评分明细======cell_score_hour============================= -->
+	<select id="findKpiHourAll" parameterType="map" resultType="map"
+		flushCache="true">
+		SELECT
+			ta1.city_name,
+			ta1.area_name,
+			ta1.cell_id,
+			ta1.cell_name_cn,
+			ta1.ne_code,
+			ta1.ne_name_cn,
+			ta1.total_score,
+			ta1.cycle_hour,
+			<foreach collection="list" index="index" item="tag" separator=",">
+				100-ta1.${tag} as #{tag}
+			</foreach>
+			,ta1.cycle,
+			ta1.cycle_date,
+			ta1.cycle_week_first,
+			ta1.cycle_week_end,
+			ta1.cycle_week,
+			100-ta1.out_of_score as out_of_score,
+			100-ta1.alarm_score alarm_score
+		FROM
+			cell_score_hour ta1 WHERE 1=1
+
+		<if test="neCode !='' and neCode!=null">
+			AND ta1.ne_code = #{neCode}
+		</if>
+		<if test="cityCode !='' and cityCode !=null">
+			AND ta1.city_code = #{cityCode}
+		</if>
+		<if test="areaCode !='' and areaCode!=null">
+			AND ta1.area_code in( ${areaCode})
+		</if>
+		
+		<if test="startCycle !='' and startCycle !=null">
+			AND ta1.cycle >= #{startCycle}
+		</if>
+		<if test="endCycle !='' and endCycle !=null">
+			<![CDATA[  AND  ta1.cycle_date <= #{endCycle}  ]]>
+		</if>
+		
+<!-- 		<if test="tableName =='cell_score_hour'">
+			AND ta1.cycle >= #{startCycle}
+	        <![CDATA[  AND  ta1.cycle <= #{endCycle}  ]]>
+		</if>
+		<if test="tableName=='bts_score_day'">
+			AND ta1.cycle_date >= #{startCycle}
+	        <![CDATA[  AND  ta1.cycle_date <= #{endCycle}  ]]>
+		</if>
+		<if test="tableName=='bts_score_week'">
+			AND ta1.cycle_week_first >= #{startCycle}
+	        <![CDATA[  AND  ta1.cycle_week_end <= #{endCycle}  ]]>
+		</if> -->
+		
+		ORDER BY ta1.cycle DESC
+			
+		<!-- 分页 -->
+		<if test="pageSize !='' and pageSize !=null">
+			LIMIT ${pageSize} OFFSET ${page}
+		</if>
+	</select>
+
+	<select id="findKpiHourCount" parameterType="map" resultType="Integer"
+		flushCache="true">
+
+		SELECT
+			count(1)
+		FROM
+			cell_score_hour ta1 WHERE 1=1
+
+		<if test="neCode !='' and neCode!=null">
+			AND ta1.ne_code = #{neCode}
+		</if>
+		<if test="cityCode !='' and cityCode !=null">
+			AND ta1.city_code = #{cityCode}
+		</if>
+		<if test="areaCode !='' and areaCode!=null">
+			AND ta1.area_code in( ${areaCode})
+		</if>
+		<if test="startCycle !='' and startCycle !=null">
+			AND ta1.cycle >= #{startCycle}
+		</if>
+		<if test="endCycle !='' and endCycle !=null">
+			<![CDATA[  AND  ta1.cycle_date <= #{endCycle}  ]]>
+		</if>
+		<!-- <if test="tableName =='cell_score_hour'">
+			AND ta1.cycle >= #{startCycle}
+	        <![CDATA[  AND  ta1.cycle <= #{endCycle}  ]]>
+		</if>
+		<if test="tableName=='bts_score_day'">
+			AND ta1.cycle_date >= #{startCycle}
+	        <![CDATA[  AND  ta1.cycle_date <= #{endCycle}  ]]>
+		</if>
+		<if test="tableName=='bts_score_week'">
+			AND ta1.cycle_week_first >= #{startCycle}
+	        <![CDATA[  AND  ta1.cycle_week_end <= #{endCycle}  ]]>
+		</if> -->
+	</select>
+
+	<!-- ================================KPI查询========================================= -->
+	<select id="findKpiQueryAll" parameterType="map" resultType="map" flushCache="true">
+		SELECT
+			ta1.city_name,
+			ta1.area_name,
+			ta1.cell_id,
+			ta1.cell_name_cn,
+			DATE_FORMAT(ta1.cycle, '%Y-%m-%d %H:%i:%s')AS cycle,
+			ta1.ne_code,
+			ta1.${tableName},
+			ta1.${tableName} as kpi
+		FROM
+			cell_kpi_data ta1 WHERE 1=1
+
+		<if test="cellId !='' and cellId !=null">
+			AND ta1.cell_id = #{cellId}
+		</if>
+		<if test="cityCode !='' and cityCode !=null">
+			AND ta1.city_code = #{cityCode}
+		</if>
+		<if test="areaCode !='' and areaCode!=null">
+			AND ta1.area_code in( ${areaCode})
+		</if>
+		<if	test="startCycle != null and startCycle !='' ">
+		     AND  ta1.cycle >= #{startCycle}
+        </if>
+		<if test="endCycle != null and endCycle != ''  ">
+		      <![CDATA[   
+		      	AND  ta1.cycle <= #{endCycle}
+		       ]]>
+		</if>
+		ORDER BY ta1.cycle DESC
+		<!-- 分页 -->
+		<if test="pageSize !='' and pageSize !=null">
+			LIMIT ${pageSize} OFFSET ${page}
+		</if>
+	</select>
+
+	<select id="findKpiQueryCount" parameterType="map" resultType="Integer"
+		flushCache="true">
+
+		SELECT
+			count(1)
+		FROM
+			cell_kpi_data ta1 WHERE 1=1
+		<if test="cellId !='' and cellId !=null">
+			AND ta1.cell_id = #{cellId}
+		</if>
+		<if test="cityCode !='' and cityCode !=null">
+			AND ta1.city_code = #{cityCode}
+		</if>
+		<if test="areaCode !='' and areaCode!=null">
+			AND ta1.area_code in( ${areaCode})
+		</if>
+		<if	test="startCycle != null and startCycle !='' ">
+		     AND  ta1.cycle >= #{startCycle}
+        </if>
+		<if test="endCycle != null and endCycle != ''  ">
+		      <![CDATA[   
+		      	AND  ta1.cycle <= #{endCycle}
+		       ]]>
+		</if>
+	</select>
+
+	<!--======================== KPI图形指标列表【查看指标】按钮================== -->
+	<select id="findKpiChartAll" parameterType="map" resultType="map"
+		flushCache="true">
+
+		SELECT
+			ta1.ne_code,
+			ta1.cell_id,
+			DATE_FORMAT(ta1.cycle, '%Y-%m-%d %H:%i:%s')AS cycle,
+			ta1.${kpiId}
+		FROM
+			cell_kpi_data ta1
+		WHERE 1=1
+		<if test="cellId !='' and cellId != null">
+			AND ta1.cell_id = #{cellId}
+		</if>
+		<if test="cycleDate != null or cycleDate != '' ">
+	           AND ta1.cycle >= date_add(#{cycleDate}, interval - ${daysInput} hour)
+	          <![CDATA[ AND  ta1.cycle <= #{cycleDate}  ]]>
+	     </if>
+		ORDER BY ta1.cycle ASC
+	</select>
+
+	<!-- ======================== KPI图形图明细================== -->
+	<select id="kpiGraphicDetailAll" parameterType="map" resultType="map"
+		flushCache="true">
+
+		SELECT
+		ta1.ne_code,
+		ta1.cell_id,
+		ta1.sector_id,
+		ta1.cycle_date,
+		<foreach collection="list" index="index" item="tag" separator=",">
+			ta1.${tag} as #{tag}
+		</foreach>
+		,ta1.cycle
+
+		FROM
+		cell_score_hour ta1
+		<where>
+			<if test="neCode !='' and neCode != null">
+				AND ta1.ne_code = #{neCode}
+			</if>
+
+			<if test="cellid !='' and cellid != null">
+				AND ta1.cell_id = #{cellid}
+			</if>
+			<if test="sectorId !='' and sectorId != null">
+				AND ta1.sector_id = #{sectorId}
+			</if>
+		</where>
+		<!-- 默认查询30天数据 -->
+		<choose>
+			<when
+				test="cycleStart == '' and cycleEnd == '' or cycleStart == null and cycleEnd == null">
+				AND ta1.cycle_date >= date_add(CURRENT_DATE(), interval -30 day)
+              <![CDATA[ 
+               AND  ta1.cycle_date <= CURRENT_DATE();
+              ]]>
+			</when>
+			<otherwise>
+          <![CDATA[   
+               AND  ta1.cycle >= #{cycleStart}
+               AND  ta1.cycle <= #{cycleEnd}
+            ]]>
+			</otherwise>
+		</choose>
+	</select>
+
+	<select id="getKpiTotal" parameterType="map" resultType="Integer"
+		flushCache="true">
+
+		SELECT
+		count(1)
+		FROM
+		cell_score_hour ta1
+		<where>
+
+			<if test="neCode !='' and neCode != null">
+				AND ta1.ne_code = #{neCode}
+			</if>
+
+			<if test="cellid !='' and cellid != null">
+				AND ta1.cell_id = #{cellid}
+			</if>
+			<if test="sectorId !='' and sectorId != null">
+				AND ta1.sector_id = #{sectorId}
+			</if>
+			<if test="cityCode !='' and cityCode !=null">
+				AND ta1.city_code = #{cityCode}
+			</if>
+			<if test="areaCode !='' and areaCode!=null">
+				AND ta1.area_code in( ${areaCode})
+			</if>
+			<if test="startCycle !='' and startCycle != null">
+				AND ta1.cycle >= #{startCycle}
+			</if>
+			<if test="endCycle !='' and endCycle !=null">
+	        <![CDATA[ 
+		      AND  ta1.cycle <= #{endCycle}
+		    ]]>
+			</if>
+		</where>
+	</select>
+	<select id="queryAll" parameterType="map" resultType="map"
+		flushCache="true">
+		SELECT
+		ta1.city_name,
+		ta1.area_name,
+		ta1.cell_id,
+		ta1.cell_name_cn,
+		ta1.cycle,
+		ta1.cycle_date,
+		ta1.cycle_hour,
+		ta1.ne_code,
+		ta1.${tableName},
+		ta1.${tableName} as kpi
+		FROM
+		cell_score_hour ta1 WHERE 1=1
+
+		<if test="cellId !='' and cellId !=null">
+			AND ta1.cell_id = #{cellId}
+		</if>
+		<if test="cityCode !='' and cityCode !=null">
+			AND ta1.city_code = #{cityCode}
+		</if>
+		<if test="areaCode !='' and areaCode!=null">
+			AND ta1.area_code in( ${areaCode})
+		</if>
+		<if test="startCycle !='' and startCycle != null">
+			AND ta1.cycle >= #{startCycle}
+		</if>
+		<if test="endCycle !='' and endCycle !=null">
+	        <![CDATA[ 
+		      AND  ta1.cycle <= #{endCycle} 
+		    ]]>
+		</if>
+
+		<!-- 分页 -->
+		<if test="limit !='' and offset !=null">
+			LIMIT ${limit} OFFSET ${offset}
+		</if>
+	</select>
+
+</mapper>	
+	
+	
+

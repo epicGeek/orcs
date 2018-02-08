@@ -1,0 +1,240 @@
+package task;
+
+import com.nsn.care.comp.exception.AdapterException;
+import com.nsn.care.comp.metatask.IScriptCallbackHandler;
+import com.nsn.care.comp.metatask.java.AbstractMetaTask;
+import com.nsn.care.comp.metatask.java.Result;
+import com.nsn.care.comp.util.LogHandler;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
+
+public class DHLR_PGW_V1 extends AbstractMetaTask
+{
+  private String cmd = "scp  -o StrictHostKeyChecking=no  -r %s %s@%s:%s";
+  private String cmd_gzip = "gzip -d %s";
+
+  private String cmd_find = "find %s";
+  private String cmd_cp = "cp -R %s %s";
+  private String srcSrc = "";
+  private String destSrc = "";
+  private String destIP = "";
+  private String user = "";
+  private String pwd = "";
+  private String rootpwd = "";
+  private String neName = "";
+  private String neTime = "";
+  private String s = "";
+
+  public Result Main(IScriptCallbackHandler handler, String filePath, String fileName, String params) throws AdapterException {
+    Result result = new Result();
+    String cmdResult = "";
+
+    LogHandler.info(-1, "[params]=" + params);
+    String[] para = params.split(",");
+    split(para);
+    this.s = (this.neTime + "-" + this.neName);
+    LogHandler.info(-1, "[lua 读取的文件名字]=" + this.s);
+    int swith_times = 0;
+    try
+    {
+      cmdResult = handler.execCommand("whoami", true, filePath, fileName, true);
+      String current_user_name = cmdResult.replaceAll("[\\t\\n\\r]", "&").split("&&")[1].trim();
+      LogHandler.info(-1, "[当前用户 current_user_name=]" + current_user_name);
+
+      if (!"root".equalsIgnoreCase(current_user_name)) {
+        LogHandler.info(-1, "[开始执行脚本 ：切换用户] ");
+        LogHandler.info(-1, "[execute]su to root");
+        cmdResult = handler.execSuCommand("su - root", true, filePath, fileName, true, "rmd", "root");
+        try {
+          Thread.currentThread();
+          Thread.sleep(2000L);
+        }
+        catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+        cmdResult = handler.execSuCommandPwd(this.rootpwd, true, filePath, fileName, true, "rpd", "root");
+
+        swith_times = 1;
+      }
+      try
+      {
+        Thread.currentThread(); Thread.sleep(2000L);
+      }
+      catch (InterruptedException e)
+      {
+        e.printStackTrace();
+      }
+      String cmd_find_success = String.format(this.cmd_find, new Object[] { this.srcSrc + "provgw-spml_command*" });
+
+      String pgw_name_info = handler.execCommand(cmd_find_success, true, filePath, fileName, true);
+      String name_pgw_success = "";
+      String[] split = pgw_name_info.split("\n");
+
+      for (String line : split) {
+        String[] split2 = line.split("\\/");
+        String string = split2[(split2.length - 1)];
+
+        if ((string.contains("provgw-spml_command.log.") & string.contains(".gz"))) {
+          name_pgw_success = string.trim();
+        }
+        string = null;
+        split2 = (String[])null;
+      }
+      split = (String[])null;
+      LogHandler.info(-1, "[ name_pgw_success=]" + name_pgw_success);
+      if (("".equals(name_pgw_success) | name_pgw_success == null)) {
+        for (int i = 1; i <= swith_times; i++) {
+          LogHandler.info(-1, "[退出：操作  执行 exit]");
+          cmdResult = handler.execExitCommand("exit", true, filePath, fileName, true, ">");
+        }
+        LogHandler.info(-1, "[当前不存在这个文件!!!]");
+        name_pgw_success = null;
+        result.setCode(39999);
+        result.setMessage("[当前不存在这个文件!!!]");
+      }
+      else {
+        this.cmd = String.format(this.cmd, new Object[] { this.srcSrc + name_pgw_success, this.user, this.destIP, this.destSrc });
+        this.cmd = this.cmd.replace("\"", "");
+        LogHandler.info(-1, "[最终格式化后cmd   ]" + this.cmd);
+        LogHandler.info(-1, "[开始执行方法 ：scp]");
+        cmdResult = handler.execScpCommand(this.cmd, true, filePath, fileName, true, ":");
+        try
+        {
+          Thread.currentThread(); Thread.sleep(5000L);
+        }
+        catch (InterruptedException e)
+        {
+          e.printStackTrace();
+        }
+
+        cmdResult = handler.execScpEnterPwdCommand(this.pwd, true, filePath, fileName, true, "#");
+        try
+        {
+          Thread.currentThread(); Thread.sleep(10000L);
+        }
+        catch (InterruptedException e)
+        {
+          e.printStackTrace();
+        }
+        for (int i = 1; i <= swith_times; i++) {
+          LogHandler.info(-1, "[开始 执行 exit 用户]");
+          cmdResult = handler.execExitCommand("exit", true, filePath, fileName, true, ">");
+
+          LogHandler.info(-1, "[执行 exit 结束 成功]");
+        }
+
+        this.cmd_gzip = String.format(this.cmd_gzip, new Object[] { "/home/jcomp/pgw_Adapter/report/" + name_pgw_success });
+        String runCommand = runCommand(this.cmd_gzip, 1);
+        LogHandler.info(-1, "[解压后的结果 ,-1为失败 ,1为成功 : ]" + runCommand);
+
+        if (!"1".equalsIgnoreCase(runCommand)) {
+          result.setCode(3999);
+          result.setMessage("[有重复文件 文件无法解压！！！]");
+        } else {
+          this.cmd_cp = String.format(this.cmd_cp, new Object[] { "/home/jcomp/pgw_Adapter/report/" + name_pgw_success.substring(0, 47), "/home/jcomp/pgw_Adapter/report/" + this.s + ".src" });
+          String runCommand_cp = runCommand(this.cmd_cp, 1);
+          LogHandler.info(-1, "[解压后的结果 ,-1为失败 ,1为成功 : ]" + runCommand);
+          if ("1".equalsIgnoreCase(runCommand_cp)) {
+            result.setCode(0);
+            result.setMessage("ok.");
+          }
+          else {
+            result.setCode(3998);
+            result.setMessage("[不能重命名！！！]");
+          }
+        }
+      }
+    }
+    catch (AdapterException ex) {
+      result.setCode(ex.getErrorCode());
+      result.setMessage(ex.getErrorMessage());
+      return result;
+    }
+    return result;
+  }
+
+  public void split(String[] para)
+  {
+    for (String s : para)
+      if (s.split(":")[0].equalsIgnoreCase("srcSrc"))
+      {
+        this.srcSrc = s.split(":")[1];
+      }
+      else if (s.split(":")[0].equalsIgnoreCase("destSrc")) {
+        this.destSrc = s.split(":")[1];
+      }
+      else if (s.split(":")[0].equalsIgnoreCase("destIP")) {
+        this.destIP = s.split(":")[1];
+      }
+      else if (s.split(":")[0].equalsIgnoreCase("user")) {
+        this.user = s.split(":")[1];
+      }
+      else if (s.split(":")[0].equalsIgnoreCase("pwd")) {
+        this.pwd = s.split(":")[1];
+        this.pwd = decode(this.pwd);
+      } else if (s.split(":")[0].equalsIgnoreCase("rootpwd")) {
+        this.rootpwd = s.split(":")[1];
+        this.rootpwd = decode(this.rootpwd);
+      } else if (s.split(":")[0].equalsIgnoreCase("neName")) {
+        this.neName = s.split(":")[1];
+      }
+      else if (s.split(":")[0].equalsIgnoreCase("neTime")) {
+        this.neTime = s.split(":")[1];
+      }
+  }
+
+  private String decode(String password)
+  {
+    String pswd_decode = "";
+    try {
+      pswd_decode = new String(Hex.decodeHex(password.toCharArray()));
+    } catch (DecoderException e) {
+      e.printStackTrace();
+      LogHandler.info(-1, "decode password exception " + e.getMessage());
+    }
+    return pswd_decode;
+  }
+
+  private String encode(String password)
+    throws DecoderException
+  {
+    String pswd_decode = "";
+    pswd_decode = new String(Hex.encodeHex(password.getBytes()));
+    return pswd_decode;
+  }
+
+  public String runCommand(String cmd, int tp) {
+    StringBuffer buf = new StringBuffer(3000);
+    LogHandler.info(-1, "传入 本地的指令 ： " + cmd);
+    String rt = "-1";
+    try {
+      Process pos = Runtime.getRuntime().exec(cmd);
+
+      pos.waitFor();
+      if (tp == 1) {
+        if (pos.exitValue() == 0)
+          rt = "1";
+      }
+      else {
+        InputStreamReader ir = new InputStreamReader(pos.getInputStream());
+        LineNumberReader input = new LineNumberReader(ir);
+        String ln = "";
+        while ((ln = input.readLine()) != null) {
+          buf.append(ln + "<br>");
+        }
+        rt = buf.toString();
+
+        input.close();
+        ir.close();
+      }
+    } catch (IOException e) {
+      rt = e.toString();
+    } catch (Exception e) {
+      rt = e.toString();
+    }
+    return rt;
+  }
+}

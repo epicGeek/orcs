@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.nokia</groupId>
+    <artifactId>fusion-all</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>fusion-dhss-node-switching</artifactId>
+   
+	<dependencies>
+  		<dependency>
+			<groupId>com.nokia</groupId>
+			<artifactId>fusion-dhss-business-domain</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.nokia</groupId>
+			<artifactId>fusion-dhss-system</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.nokia</groupId>
+			<artifactId>fusion-dhss-interface-jms</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.nokia</groupId>
+			<artifactId>ices-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- zj -->
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>3.3</version>
+		</dependency>
+		<dependency>
+  			<groupId>com.jcraft</groupId>
+ 	 		<artifactId>jsch</artifactId>
+  			<version>0.1.51</version>
+		</dependency>
+	</dependencies>
+</project>

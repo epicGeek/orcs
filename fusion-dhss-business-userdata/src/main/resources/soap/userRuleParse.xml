@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+     用户自定义用户数据解析规则,以及配置说明
+UserRuleParse属于根节点元素，每配置一个元素为一个Tab，比如General，tabName属性为表示该tab标识；
+General元素：identifier、version为需要显示的字段；
+元素属性说明：zhName：表示该字段对应的中文名称;
+         path：表示根据path获取xml元素对应的值;
+         valueDes： 表示元素值中文含义；
+         showType：表示该元素展示的类型（text/select/radio/checkbox）
+         parentName:表示如果该节点拥有多个节点，即在父子节点属性添加该属性
+         order：该属性表示排序，正整数从小到大，小的排前，大的排后
+注意：如果展示方式只是text可以不必配置（valueDes属性，可选）其他类型需配置。如果不配置默认显示path获取指定值
+
+更新信息：2015-6-23 gaojie
+-->
+
+<UserRuleParse>
+      <!-- tab1  -->
+    <Auc tabName='Auc' order='2'>
+         <imsi   showType='text' zhName='imsi'  path='/objects/auc/imsi' />
+         <encKey showType='text' zhName='加密ki' path='/objects/auc/encKey' />
+	     <algoId showType='text' zhName='算法' path='/objects/auc/algoId' />
+	     <kdbId  showType='text' zhName='密钥ID' path='/objects/auc/kdbId' />
+	     <acsub  showType='text' zhName='加密用户类型' path='/objects/auc/acsub' valueDes='1:GSM,2:UMTS' />
+         <amf  showType='text' zhName='amf' path='/objects/auc/amf' />
+    </Auc> 
+
+    <!--  tab2 -->
+	<General tabName='General' order='1'>	
+		  <mscat  showType='text' zhName='用户数据类型' path='/objects/hlr/mscat' valueDes='10:normal,20:test'/>
+		  <ts11 zhName='Tele services'>
+		  		<msisdn showType='text' zhName='msisdn' path='/objects/hlr/ts11/msisdn' />
+		  </ts11>		  
+		  <ts21 zhName='Short message (mobile terminating)'>
+		  		<msisdn showType='text' zhName='msisdn' path='/objects/hlr/ts21/msisdn' />
+		  </ts21>	  
+		  <ts22 zhName='Short message (mobile originating)'>
+		  		<msisdn showType='text' zhName='msisdn' path='/objects/hlr/ts22/msisdn' />
+		  </ts22>
+		  <bs30genr showType='text' zhName='Data circuit duplex synchronous services' path='/objects/hlr/bs30genr/msisdn' />
+		  <imeisv showType='text' zhName='imeisv' path='/objects/hlr/imeisv' />
+		  <umtsSubscriber zhName='umtsSubscriber'>
+			  <accTypeGSM showType='text' zhName='accTypeGSM' path='/objects/hlr/umtsSubscriber/accTypeGSM' valueDes='true:ACC_TYPE_GSM'/>
+			  <accTypeGERAN showType='text' zhName='accTypeGERAN' path='/objects/hlr/umtsSubscriber/accTypeGERAN' valueDes='true:ACC_TYPE_GERAN'/>
+			  <accTypeUTRAN showType='text' zhName='accTypeUTRAN' path='/objects/hlr/umtsSubscriber/accTypeUTRAN' valueDes='true:ACC_TYPE_UTRAN'/>
+		  </umtsSubscriber>
+	</General> 
+	
+	 <!--  tab3 -->
+	<OperatorDeterminedBarring tabName='Operator Determined Barring' order='3'>
+	
+		 <odboc showType='text' zhName='呼出限制' path='/objects/hlr/odboc' 
+		        valueDes='0:None,1:All outgoing calls,2:All outgoing international calls,
+		        3:Barring of all outgoing international calls  except those directed to the HPLMN country,
+		        4:All outgoing calls when roaming outside the HPLMN country,
+		        5:All outgoing calls when roaming outside HPLMN country except SMS'/>
+		        
+		 <odbic showType='text' zhName='呼入限制' path='/objects/hlr/odbic' valueDes='0:None,1:All incoming calls,
+		        2:All incoming calls when roaming outside the HPLMN country,
+		        3:All incoming calls when roaming outside HPLMN country except SMS'/>
+		 
+		 <odbBaroam showType='text' zhName='漫游限制' path='/objects/hlr/odbr' valueDes='0:None,1:Outside the HPLMN,2:Outside the HPLMN country'/>
+		
+		 <odbgprs showType='text' zhName='odbgprs' path='/objects/hlr/odbgprs' valueDes='0:None,1:While roaming in VPLMN,2:In all PLMN'/>
+		 
+		 <osb zhName='osb Context'>
+		       <osb1  showType='text' zhName='osb1' path='/objects/hlr/osb1'/>
+		       <osb2  showType='text' zhName='osb2' path='/objects/hlr/osb2'/>
+		       <osb3  showType='text' zhName='osb3' path='/objects/hlr/osb3'/>
+		       <osb4  showType='text' zhName='osb4' path='/objects/hlr/osb4'/>
+		 </osb>
+		 
+	</OperatorDeterminedBarring>
+	
+	
+	<!--  tab4 -->
+	<Restrictions tabName='Restrictions' order='4'>
+		<rr showType='text' zhName='Roaming Profile' path='/objects/hlr/rr' valueDes='rp01:国内漫游,rp02:本地漫游,rp03:省内漫游,
+		    rp04:国内加港澳台,rp10:香港万众一卡多号'/>
+	    <sr showType='text' zhName='Subscription restriction' path='/objects/hlr/sr' valueDes='1:All GSM PLMNs,
+	        2:One national PLMN and all other foreign PLMNs,9:Home PLMN only'/>
+	</Restrictions>
+	
+	
+	<!--  tab5 -->
+	<Gprs tabName='Gprs'  order='5'>
+	      <nwa showType='text' zhName='Newtork Access' path='/objects/hlr/nwa' valueDes='1:GSM,2:GPRS,3:GSM and GPRS'/>
+	      <actIMSIGprs showType='text' zhName='actIMSIGprs' path='/objects/hlr/actIMSIGprs' />
+	      <generalChargingCharacteristics zhName='General Charging Characteristics'>
+	       	   <chargingCharacteristics showType='text' zhName='Charging Characteristics' path='/objects/hlr/generalChargingCharacteristics/chargingCharacteristics' />
+	       	   <chargingCharacteristicsProfile showType='text' zhName='Charging Characteristics Profile' path='/objects/hlr/generalChargingCharacteristics/chargingCharacteristicsProfile' />
+	       	   <chargingCharacteristicsBehavior showType='text' zhName='Charging Characteristics Behavior' path='/objects/hlr/generalChargingCharacteristics/chargingCharacteristicsBehavior' />
+	      </generalChargingCharacteristics>
+	      <pdpContext zhName='pdpContext' parentName='/objects/hlr/pdpContext'  >
+	           <id showType='text' zhName='pdpContext ID' path='/objects/hlr/pdpContext/id' />
+	           <type showType='text' zhName='type' path='/objects/hlr/pdpContext/type' />
+	           <qosProfile showType='text' zhName='qosProfile' path='/objects/hlr/pdpContext/qosProfile' />
+	           <apn showType='text' zhName='apn' path='/objects/hlr/pdpContext/apn' />
+	           <apnArea showType='text' zhName='apnArea' path='/objects/hlr/pdpContext/apnArea' />
+	      </pdpContext>
+	</Gprs>
+	
+	<!--  tab6 -->
+	<Eps tabName='Eps' order='6'>
+	 
+	     <eps zhName='eps'>
+	          <defaultPdnContextId showType='text' zhName='default PdnContext Id' path='/objects/hlr/eps/defaultPdnContextId' />
+	          <maxBandwidthUp showType='text' zhName='max Bandwidth Up' path='/objects/hlr/eps/maxBandwidthUp' />
+	          <maxBandwidthDown showType='text' zhName='max Bandwidth Down' path='/objects/hlr/eps/maxBandwidthDown' />
+	          <mmeIdentity showType='text' zhName='mme Identity' path='/objects/hlr/eps/mmeIdentity' />
+	          <mmeRealm showType='text' zhName='mme Realm' path='/objects/hlr/eps/mmeRealm' />	          
+	          <msPurgedEps showType='text' zhName='msPurgedEps' path='/objects/hlr/eps/msPurgedEps' /> 	          
+	          <msisdn showType='text' zhName='msisdn' path='/objects/hlr/eps/msisdn' />
+	          <sessionTransferNumber showType='text' zhName='sessionTransferNumber' path='/objects/hlr/eps/sessionTransferNumber' />  
+	          <odbPOAccessEps showType='text' zhName='odbPOAccessEps' path='/objects/hlr/eps/odbPOAccessEps' />	          
+	          <rfspIndex showType='text' zhName='rfspIndex' path='/objects/hlr/eps/rfspIndex' />
+	          <imsVoiceOverPS showType='text' zhName='imsVoiceOverPS' path='/objects/hlr/eps/imsVoiceOverPS' />
+	          <vplmnIdS6a showType='text' zhName='vplmnIdS6a' path='/objects/hlr/eps/vplmnIdS6a' />
+	          <plmnStatus showType='text' zhName='plmnStatus' path='/objects/hlr/eps/plmnStatus' />
+	          <locUpdateTimestamp showType='text' zhName='location Update Timestamp' path='/objects/hlr/eps/locUpdateTimestamp' />
+			  <mmeSuppFeatures   zhName='mmeSuppFeatures'>
+		        <featuredListId showType='text' zhName='featuredListId' path='/objects/hlr/eps/mmeSuppFeatures/featuredListId' />
+		        <featuredList showType='text' zhName='featuredList' path='/objects/hlr/eps/mmeSuppFeatures/featuredList' />
+			  </mmeSuppFeatures>	        
+			  <epsPsRoamAreaMmeName showType='text' zhName='4G漫游限制' path='/objects/hlr/epsPsRoamAreaMmeName' />   
+	     </eps>     
+	     <epsPdnContext zhName='epsPdnContext' parentName='/objects/hlr/epsPdnContext'>
+	                <contextId showType='text' zhName='epsPdnContext id' path='/objects/hlr/epsPdnContext/contextId' />
+	                <apn showType='text' zhName='apn' path='/objects/hlr/epsPdnContext/apn' />
+	                <type showType='text' zhName='type' path='/objects/hlr/epsPdnContext/type' />
+	                <pdnGwDynamicAllocation showType='text' zhName='pdnGwDynamicAllocation' path='/objects/hlr/epsPdnContext/pdnGwDynamicAllocation' />
+	                <vplmnAddressAllowed showType='text' zhName='vplmnAddressAllowed' path='/objects/hlr/epsPdnContext/vplmnAddressAllowed' />
+	                <pdnGwIPv4 showType='text' zhName='pdnGwIPv4' path='/objects/hlr/epsPdnContext/pdnGwIPv4' />
+	                <maxBandwidthUp showType='text' zhName='maxBandwidthUp' path='/objects/hlr/epsPdnContext/maxBandwidthUp' />
+	                <maxBandwidthDown showType='text' zhName='maxBandwidthDown' path='/objects/hlr/epsPdnContext/maxBandwidthDown' />
+	                <qos showType='text' zhName='qos' path='/objects/hlr/epsPdnContext/qos'/>
+					<pdnChargingCharacteristics   zhName='pdnChargingCharacteristics'>
+	      				<chargingCharacteristics showType='text' zhName='Charging Characteristics' path='/objects/hlr/epsPdnContext/pdnChargingCharacteristics/chargingCharacteristics' />
+	      				<chargingCharacteristicsProfile showType='text' zhName='Charging Characteristics Profile' path='/objects/hlr/epsPdnContext/pdnChargingCharacteristics/chargingCharacteristicsProfile' />
+	      				<chargingCharacteristicsBehavior showType='text' zhName='Charging Characteristics Behavior' path='/objects/hlr/epsPdnContext/pdnChargingCharacteristics/chargingCharacteristicsBehavior' />
+					</pdnChargingCharacteristics>
+	    </epsPdnContext>
+	</Eps>
+	
+	
+	<!-- tab 7-->
+	
+	<SupplementaryServices tabName='Supplementary Services' order='7'>
+
+	   <clip  showType='text' zhName='来电显示' path='/objects/hlr/clip' valueDes='true:Calling line identification presentation'/>
+	   <clipOverride  showType='text'  zhName='强制来显' path='/objects/hlr/clipOverride' valueDes='true:clipOverride'/>
+	   <natss14 showType='text'  zhName='彩铃' path='/objects/hlr/natss14' valueDes='true:srbt'/>
+	   <mrbt showType='text'  zhName='多媒体彩铃' path='/objects/hlr/mrbt' valueDes='true:mrbt'/>
+	   <hold showType='text'  zhName='呼叫保持' path='/objects/hlr/hold' valueDes='true:call hold'/>
+	   <mpty showType='text'  zhName='多方通话' path='/objects/hlr/mpty' valueDes='true:mpty'/>
+	   <caw zhName='call waitting'>
+		     <basicServiceGroup showType='text' zhName='basicServiceGroup' path='/objects/hlr/caw/basicServiceGroup' />
+		     <status showType='text' zhName='status' path='/objects/hlr/caw/status' valueDes='4:provisioned.5:provisioned + active'/>
+	   </caw>
+
+	   <baoc zhName='Barring all outgoing calls'>
+	        <basicServiceGroup showType='text' zhName='basicServiceGroup' path='/objects/hlr/baoc/basicServiceGroup' />
+	        <status showType='text' zhName='status' path='/objects/hlr/baoc/status' valueDes='4:provisioned,5:provisioned + active'/>
+	   </baoc>
+	   <boic zhName='Barring of outgoing international calls' parentName='/objects/hlr/boic' >
+	        <basicServiceGroup showType='text' zhName='basicServiceGroup' path='/objects/hlr/boic/basicServiceGroup' />
+	        <status showType='text' zhName='status' path='/objects/hlr/boic/status' valueDes='4:provisioned,5:provisioned + active'/>
+	   </boic>
+	   <boicexhc zhName='Barring of outgoing international calls except those directed to HPLMN country' parentName='/objects/hlr/boicexhc'>
+	        <basicServiceGroup showType='text' zhName='basicServiceGroup' path='/objects/hlr/boic/basicServiceGroup' />
+	        <status showType='text' zhName='status' path='/objects/hlr/boic/status' valueDes='4:provisioned,5:provisioned + active'/>
+	   </boicexhc>
+	   <baic zhName='Barring all incoming calls'>
+		    <basicServiceGroup showType='text' zhName='basicServiceGroup' path='/objects/hlr/baic/basicServiceGroup' />
+		    <status showType='text' zhName='status' path='/objects/hlr/baic/status' valueDes='4:provisioned,5:provisioned + active'/>
+	   </baic>
+	   
+	   <bicroam zhName='Barring of incoming calls while roaming outside HPLMN country' parentName='/objects/hlr/bicroam'>
+	        <basicServiceGroup showType='text' zhName='basicServiceGroup' path='/objects/hlr/bicroam/basicServiceGroup' />
+	        <status showType='text' zhName='status' path='/objects/hlr/bicroam/status' valueDes='4:provisioned,5:provisioned + active'/>
+	   </bicroam>
+	   <cfu zhName='Call forwarding unconditional' parentName='/objects/hlr/cfu'>
+		    <basicServiceGroup showType='text' zhName='basicServiceGroup' path='/objects/hlr/cfu/basicServiceGroup' />
+		    <status showType='text' zhName='status' path='/objects/hlr/cfu/status' valueDes='4:Provide,6:Register,7:Activate'/>
+		    <isdnNumber showType='text' zhName='isdnNumber' path='/objects/hlr/cfu/isdnNumber' />
+	   </cfu>
+	   <cfb zhName='Call forwarding on mobile subscriber busy'>
+		     <basicServiceGroup showType='text' zhName='basicServiceGroup' path='/objects/hlr/cfb/basicServiceGroup' />
+		     <status showType='text' zhName='status' path='/objects/hlr/cfb/status' valueDes='4:Provide,6:Register,7:Activate'/>
+		     <isdnNumber showType='text' zhName='isdnNumber' path='/objects/hlr/cfb/isdnNumber' />
+	   </cfb>
+	   
+	   <cfnrc zhName='Call forwarding on mobile subscriber not reachable'>
+		     <basicServiceGroup showType='text' zhName='basicServiceGroup' path='/objects/hlr/cfnrc/basicServiceGroup' />
+		     <status showType='text' zhName='status' path='/objects/hlr/cfnrc/status' valueDes='4:Provide,6:Register,7:Activate'/>
+		     <isdnNumber showType='text' zhName='isdnNumber' path='/objects/hlr/cfnrc/isdnNumber' />
+	  </cfnrc>
+	  
+	  <cfnry zhName='Call forwarding on no reply'>
+		     <basicServiceGroup showType='text' zhName='basicServiceGroup' path='/objects/hlr/cfnry/basicServiceGroup' />
+		     <status showType='text' zhName='status' path='/objects/hlr/cfnry/status' valueDes='4:Provide,6:Register,7:Activate'/>
+		     <isdnNumber showType='text' zhName='isdnNumber' path='/objects/hlr/cfnry/isdnNumber' />
+		     <noReplyConditionTimer showType='text' zhName='noReplyConditionTimer' path='/objects/hlr/cfnry/noReplyConditionTimer' />
+	  </cfnry>	 
+		 
+	  <cfd zhName='Call forwarding default'>
+		     <isdnNumber showType='text' zhName='isdnNumber' path='/objects/hlr/cfd/isdnNumber' />
+		     <status showType='text' zhName='status' path='/objects/hlr/cfd/status' valueDes='4:Provide,6:Register,7:Activate'/>
+		     <replaceCFConditional showType='text' zhName='Replace CF Conditional' path='/objects/hlr/cfd/replaceCFConditional' 
+		                           valueDes='1:On mobile subscriber busy,2:On no reply,4:On mobile subscriber not reachable'/>
+		     <ftnoType showType='text' zhName='FTNO Format' path='/objects/hlr/cfd/ftnoType' valueDes='internat:International,"":Unknown'/>
+		     <serviceAvailable showType='text' zhName='Servic eAvailable' path='/objects/hlr/cfd/serviceAvailable' valueDes='1:All GSM PLMNs,5:Home PLMN only'/>
+	   </cfd>	
+	</SupplementaryServices> 
+	
+	<!-- tab 8-->
+	
+	<CamelServices tabName='Camel Services' order='8'>
+			<ocsi zhName='ocsi'> 
+ 		       <operatorServiceName showType='text' zhName='Operator Service Name / Scf Address / Service Key' path='/objects/hlr/ocsi/operatorServiceName' 
+ 		                          valueDes='VOLTE_OCI:VOLTE_OCI / 8613449437 / 77,ocsi750:ocsi750 / 8613744106 / 3,ocsi751:ocsi751 / 8613744111 / 3,ocsi752:ocsi752 / 8613744120 / 3,ocsi753:ocsi753 / 8613744101 / 3,ocsi754:ocsi754 / 8613744117 / 3,ocsi755:ocsi755 / 8613744105 / 3,ocsi756:ocsi756 / 8613744100 / 3,ocsi757:ocsi757 / 8613740134 / 3,ocsi758:ocsi758 / 8613744118 / 3,ocsi759:ocsi759 / 8613744107 / 3,ocsi760:ocsi760 / 8613744121 / 16,ocsi000:ocsi000 / 1 / 1,oTestBed:oTestBed / 8613748111 / 3,ocsiSCP19:ocsiSCP19 / 8613744106 / 3,ocsiSCP24:ocsiSCP24 / 8613744111 / 3,ocsiSCP33:ocsiSCP33 / 8613744120 / 3,ocsiSCP14:ocsiSCP14 / 8613744101 / 3,ocsiSCP30:ocsiSCP30 / 8613744117 / 3,ocsiSCP18:ocsiSCP18 / 8613744105 / 3,ocsiSCP13:ocsiSCP13 / 8613744100 / 3,ocsiSCP06:ocsiSCP06 / 8613740134 / 3,ocsiSCP31:ocsiSCP31 / 8613744118 / 3,ocsiSCP20:ocsiSCP20 / 8613744107 / 3,ocsiSCP34:ocsiSCP34 / 8613744121 / 16'/>
+			   <csiState  showType='text' path='/objects/hlr/ocsi/csiState' valueDes='1:Active'/>
+			   <csiNotify  showType='chetextckbox' path='/objects/hlr/ocsi/csiNotify' valueDes='1:Notification to GSMSCF'/>
+			</ocsi>
+			<tcsi zhName='tcsi'>
+ 		       <operatorServiceName showType='text' zhName='Operator Service Name / Scf Address / Service Key' path='/objects/hlr/tcsi/operatorServiceName'
+ 		                          valueDes='VOLTE-TCSI:VOLTE-TCSI / 8613747115 / 18,tcsi800:tcsi800 / 8613744106 / 3,tcsi801:tcsi801 / 8613744111 / 3,tcsi802:tcsi802 / 8613744120 / 3,tcsi803:tcsi803 / 8613744101 / 3,tcsi804:tcsi804 / 8613744117 / 3,tcsi805:tcsi805 / 8613744105 / 3,tcsi806:tcsi806 / 8613744100 / 3,tcsi807:tcsi807 / 8613740134 / 3,tcsi808:tcsi808 / 8613744118 / 3,tcsi809:tcsi809 / 8613744107 / 3,tcsi810:tcsi810 / 8613744121 / 16,tcsi000:tcsi000 / 1 / 1,tcsi811:tcsi811 / 8613741243 / 14,tTestbed:tTestbed / 8613748111 / 3,tcsiSCP19:tcsiSCP19 / 8613744106 / 3,tcsiSCP24:tcsiSCP24 / 8613744111 / 3,tcsiSCP33:tcsiSCP33 / 8613744120 / 3,tcsiSCP14:tcsiSCP14 / 8613744101 / 3,tcsiSCP30:tcsiSCP30 / 8613744117 / 3,tcsiSCP18:tcsiSCP18 / 8613744105 / 3,tcsiSCP13:tcsiSCP13 / 8613744100 / 3,tcsiSCP06:tcsiSCP06 / 8613740134 / 3,tcsiSCP31:tcsiSCP31 / 8613744118 / 3,tcsiSCP20:tcsiSCP20 / 8613744107 / 3,tcsiSCP34:tcsiSCP34 / 8613744121 / 16,tcsiYKDH:tcsiYKDH / 8613741243 / 14,VOLTE-TEST:VOLTE-TEST / 8613449437 / 18,VOLTETCSI2:VOLTETCSI2 / 8613747117 / 18'/>
+
+	 			<csiState  showType='text' path='/objects/hlr/tcsi/csiState' valueDes='1:Active'/>
+				<csiNotify  showType='text' path='/objects/hlr/tcsi/csiNotify' valueDes='1:Notification to GSMSCF'/>
+			</tcsi>	   
+	</CamelServices>
+	
+	<!-- tab 9 -->
+	<MobileData tabName='Mobile Data' order='9'>
+	   <vlrMobData zhName='VLR Mobile Data'>
+			<vlrIdValid showType='text' zhName='vlrIdValid' path='/objects/hlr/vlrMobData/vlrIdValid' />
+ 	   	    <!--	<mscNumber showType='text' zhName='mscNumber' path='/objects/hlr/vlrMobData/mscNumber' />      
+	       	<isdnNumberOfVLR showType='text' zhName='vlrNumber' path='/objects/hlr/vlrMobData/isdnNumberOfVLR' />   -->
+	       	<msPurged showType='text' zhName='msPurged by VLR' path='/objects/hlr/vlrMobData/msPurged' />
+   			<mobileTerminatingCallPossible showType='text' zhName='mobile Terminating Call Possible' path='/objects/hlr/vlrMobData/mobileTerminatingCallPossible' />
+   			<plmnAllowed showType='text' zhName='plmn Allowed' path='/objects/hlr/vlrMobData/plmnAllowed' />
+   			<roamingAreaAllowed showType='text' zhName='roaming AreaAllowed' path='/objects/hlr/vlrMobData/roamingAreaAllowed' />
+   			<mscAreaRestrictedReceived showType='text' zhName='msc Area Restricted Received' path='/objects/hlr/vlrMobData/mscAreaRestrictedReceived' />
+   			<supportedLCSCapabilitySetsForVLR showType='text' zhName='supported LCS Capability Sets for VLR' path='/objects/hlr/vlrMobData/supportedLCSCapabilitySetsForVLR' />
+			<supportedCAMELPhaseByVLR showType='text' zhName='supported CAMEL Phase By VLR' path='/objects/hlr/vlrMobData/supportedCAMELPhaseByVLR' />
+	       	<supportedMAPVersionForLUP showType='text' zhName='supported MAP Version For LUP' path='/objects/hlr/vlrMobData/supportedMAPVersionForLUP' />
+	      	<locUpdateCSTimestamp showType='text' zhName='location Update CS Timestamp' path='/objects/hlr/vlrMobData/locUpdateCSTimestamp' />
+	   </vlrMobData>
+      
+	   <sgsnMobData zhName='SGSN Mobile Data'>
+	       <msPurged showType='text' zhName='msPurged by SGSN' path='/objects/hlr/sgsnMobData/msPurged' />
+	       <isdnNumberOfSGSN showType='text' zhName='SGSN number' path='/objects/hlr/sgsnMobData/isdnNumberOfSGSN' />
+	       <sgsnExtQos showType='text' zhName='sgsnExtQos' path='/objects/hlr/sgsnMobData/sgsnExtQos'/>
+		   <sgsnIdValid showType='text' zhName='sgsnIdValid' path='/objects/hlr/sgsnMobData/sgsnIdValid'/>
+	       <plmnAllowed showType='text' zhName='plmnAllowed' path='/objects/hlr/sgsnMobData/plmnAllowed'/>
+	       <gprsAllowed showType='text' zhName='gprsAllowed' path='/objects/hlr/sgsnMobData/gprsAllowed'/>
+	       <sgsnCamelNot showType='text' zhName='sgsnCamelNot' path='/objects/hlr/sgsnMobData/sgsnCamelNot'/>
+	       <locUpdatePSTimestamp showType='text' zhName='location Update PS Timestamp' path='/objects/hlr/sgsnMobData/locUpdatePSTimestamp' />
+	       <sgsnAreaRestRcvd showType='text' zhName='sgsnAreaRestRcvd' path='/objects/hlr/sgsnMobData/sgsnAreaRestRcvd'/>
+	       <roamingAreaAllowed showType='text' zhName='roamingAreaAllowed' path='/objects/hlr/sgsnMobData/roamingAreaAllowed'/>
+	       <supportedCAMELPhaseBySGSN showType='text' zhName='supportedCAMELPhaseBySGSN' path='/objects/hlr/sgsnMobData/supportedCAMELPhaseBySGSN'/>
+	       <supportedMAPVersionForLUP showType='text' zhName='supportedMAPVersionForLUP' path='/objects/hlr/sgsnMobData/supportedMAPVersionForLUP'/>
+	       <featuresNotSupportedBySGSN showType='text' zhName='featuresNotSupportedBySGSN' path='/objects/hlr/sgsnMobData/featuresNotSupportedBySGSN'/>
+	   </sgsnMobData>
+	
+	</MobileData>
+
+	
+	<!-- tab 10 -->
+	<VoLTE tabName='VoLTE' order='10'>
+   
+			<subscriptionId showType='text' zhName='Subscription Id' path='/objects/hss/subscriptionId' />
+			<profileType showType='text' zhName='profile Type' path='/objects/hss/profileType' />
+			<adminBlocked showType='text' zhName='admin Blocked' path='/objects/hss/adminBlocked' />
+			<defaultScscfRequired showType='text' zhName='default Scscf Required' path='/objects/hss/defaultScscfRequired' />
+			<scscfSipAddress showType='text' zhName='scscf Sip Address' path='/objects/hss/scscfSipAddress' />
+			<scscfHost showType='text' zhName='scscf Host' path='/objects/hss/scscfHost' />
+			<scscfDestinationRealm showType='text' zhName='scscf Destination Realm' path='/objects/hss/scscfDestinationRealm' />				
+			<sharedIFCSupport showType='text' zhName='shared IFC Support' path='/objects/hss/sharedIFCSupport' />	
+			<implicitRegisteredSet zhName='implicit Registered Set'>
+				<irsId showType='text' zhName='irs Id' path='/objects/hss/implicitRegisteredSet/irsId' />	
+				<registrationStatus showType='text' zhName='registration Status' path='/objects/hss/implicitRegisteredSet/registrationStatus' />
+				<authenticationPending showType='text' zhName='authentication Pending' path='/objects/hss/implicitRegisteredSet/authenticationPending' />
+				<provisionedPrivateId showType='text' zhName='provisioned PrivateId' path='/objects/hss/implicitRegisteredSet/provisionedPrivateId' />
+			</implicitRegisteredSet>				
+			<privateUserId zhName='private User Id'>
+		 			<privateUserId showType='text' zhName='private User Id' path='/objects/hss/privateUserId/privateUserId' />
+					<provisionedImsi showType='text' zhName='provisioned Imsi' path='/objects/hss/privateUserId/provisionedImsi/provisionedImsi' />
+					<msisdn showType='text' zhName='msisdn' path='/objects/hss/privateUserId/msisdn' />
+					<httpDigestKeyVersion showType='text' zhName='http Digest Key Version' path='/objects/hss/privateUserId/httpDigestKeyVersion' />
+		 			<usedAuthenticationScheme showType='text' zhName='used Authentication Scheme' path='/objects/hss/privateUserId/usedAuthenticationScheme' />
+					<actAsVLR showType='text' zhName='actAsVLR' path='/objects/hss/privateUserId/actAsVLR' />
+					<preferredDomain showType='text' zhName='preferred Domain' path='/objects/hss/privateUserId/preferredDomain' />
+					<looseRoutingIndicationRequired showType='text' zhName='loose Routing Indication Required' path='/objects/hss/privateUserId/looseRoutingIndicationRequired' />
+			</privateUserId>
+
+			<publicUserId zhName='public User Id'>
+				<publicUserId showType='text' zhName='public User Id' path='/objects/hss/publicUserId/publicUserId' />
+				<originalPublicUserId showType='text' zhName='original Public User Id' path='/objects/hss/publicUserId/originalPublicUserId' />
+				<barringIndication showType='text' zhName='barring Indication' path='/objects/hss/publicUserId/barringIndication' />
+				<defaultIndication showType='text' zhName='default Indication' path='/objects/hss/publicUserId/defaultIndication' />
+				<irsId showType='text' zhName='irs Id' path='/objects/hss/publicUserId/irsId' />
+				<displayNamePrivacy showType='text' zhName='display Name Privacy' path='/objects/hss/publicUserId/displayNamePrivacy' />
+				<aliasId showType='text' zhName='alias Id' path='/objects/hss/publicUserId/aliasId' />
+				<isChildIMPU showType='text' zhName='is Child IMPU' path='/objects/hss/publicUserId/isChildIMPU' />					
+			</publicUserId>
+			<serviceProfile zhName='serviceProfile'>
+				<profileName showType='text' zhName='profileName' path='/objects/hss/serviceProfile/profileName' />
+				<mandatoryCapability showType='text' zhName='mandatory Capability' path='/objects/hss/serviceProfile/mandatoryCapability/mandatoryCapability' />
+
+				<subscribedMediaProfileID zhName='subscribed Media Profile ID'>
+						<sessionReleasePolicy showType='text' zhName='session Release Policy' path='/objects/hss/serviceProfile/subscribedMediaProfileID/sessionReleasePolicy' />
+						<forkingPolicy showType='text' zhName='forking Policy' path='/objects/hss/serviceProfile/subscribedMediaProfileID/forkingPolicy' />
+				</subscribedMediaProfileID>		
+				
+				<globalFilterId zhName='global Filter Id'>
+						<globalFilterId0 showType='text' zhName='global Filter Id' path='/objects/hss/serviceProfile/globalFilterId/globalFilterId' />	
+				</globalFilterId>			
+			</serviceProfile>
+			<aliasGroup zhName='alias Group'>
+				<aliasId showType='text' zhName='alias Id' path='/objects/hss/aliasGroup/aliasId' />
+				<serviceProfileName showType='text' zhName='service Profile Name' path='/objects/hss/aliasGroup/serviceProfileName' />
+				<irsId showType='text' zhName='irs Id' path='/objects/hss/aliasGroup/irsId' />		
+			</aliasGroup>	
+			<notification zhName='notification'>				  
+				 <asHostName showType='text' zhName='as Host Name' path='/objects/hss/notification/asHostName' />	
+			</notification>
+
+			<aliasRepositoryData zhName='alias Repository Data'>
+				 <serviceIndId showType='text' zhName='service Ind Id' path='/objects/hss/aliasRepositoryData/serviceIndId' />	
+			</aliasRepositoryData>
+
+            <smsSubData  zhName='Subscriber type'>
+                 <refPriorityListName  showType='text' zhName='Priority List Name'  path='/objects/hlr/smsSubData/refPriorityListName' />
+            </smsSubData>
+            
+	</VoLTE> 
+	
+</UserRuleParse>

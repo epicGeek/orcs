@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.nokia.ices.apps.fusion.score.repository.DashBoardRepository">
+
+	<!-- 故障统计 饼图 -->
+	<select id="searchMaxCycleBreakReasion" resultType="String" flushCache="true">
+		SELECT max(cycle) cycle from fault_analysis_hour where manufacturer>0
+	</select>
+	
+	<select id="searchTotal" parameterType="map" resultType="Double"  flushCache="true">
+	         SELECT SUM(${kpiName}) AS ${kpiName} FROM fault_analysis_hour
+		<where>
+		     1=1  <!-- AND manufacturer = 5 -->
+		    <if test="startDate !='' and startDate !=null">
+			      <![CDATA[ 
+					  AND cycle>=#{startDate}
+			      ]]>
+			</if>
+			<if test="endDate !='' and endDate !=null">
+				<![CDATA[ 
+					 AND  cycle<=#{endDate}
+			      ]]>
+			</if>
+			<if test="cycle !='' and cycle !=null">
+				  AND cycle=#{cycle}
+			</if>
+			<if test="areaCode !='' and areaCode!=null">
+				AND area_code in( ${areaCode})
+			</if>
+		</where>
+	</select>
+	<!-- 新增需求 饼图跳转 -->
+	<select id="searchAreaAndCityScore" parameterType="map" resultType="map" flushCache="true">
+	
+	 SELECT ${percent} FROM
+		(SELECT ${filed} FROM fault_analysis_hour
+		<where>
+		     1=1  <!-- AND manufacturer = 5 -->
+		    <if test="startDate !='' and startDate !=null">
+			      <![CDATA[ 
+					  AND cycle>=#{startDate}
+			      ]]>
+			</if>
+			<if test="endDate !='' and endDate !=null">
+				<![CDATA[ 
+					 AND  cycle<=#{endDate}
+			      ]]>
+			</if>
+			<if test="cycle !='' and cycle !=null">
+				  AND cycle=#{cycle}
+			</if>
+			<if test="areaCode !='' and areaCode!=null">
+				AND area_code in( ${areaCode})
+			</if>
+		</where>
+		GROUP BY ${groupByName})ta1 ORDER BY ${kpiName} DESC
+	</select>
+	
+	<!-- 故障统计 饼图 -->
+	<select id="searchCurBreakReasion" parameterType="map"
+		resultType="map" flushCache="true">
+		SELECT ${round}
+		from (
+		 SELECT ${sumParam} from  fault_analysis_hour
+		<where>
+		     1=1 
+		    <if test="startDate !='' and startDate !=null">
+			      <![CDATA[ 
+					  AND cycle>=#{startDate}
+			      ]]>
+			</if>
+			<if test="endDate !='' and endDate !=null">
+				<![CDATA[ 
+					 AND  cycle<=#{endDate}
+			      ]]>
+			</if>
+			<if test="cycle !='' and cycle !=null">
+				  AND cycle=#{cycle}
+			</if>
+			<!-- <if test="factoryType !='' and factoryType !=null">
+				AND manufacturer=#{factoryType}
+			</if>
+			<if test="factoryType =='' or factoryType ==null">
+				AND manufacturer=5
+			</if> -->
+			
+			<!-- <if test="cityCode !='' and cityCode !=null">
+				AND city_code = #{cityCode}
+			</if> -->
+			<if test="areaCode !='' and areaCode!=null">
+				AND area_code in( ${areaCode})
+			</if>
+		</where>
+		 )ta1
+	</select>
+	
+<!-- 	 地市 诺基亚最近的周期时间 -->
+	<select id="searchMaxCycleAreaScoreByNokia" resultType="String" flushCache="true">
+		SELECT max(cycle) cycle from area_score_hour where  manufacturer=0
+	</select>
+	<!-- 地市 第三方最近的周期时间 -->
+	<select id="searchMaxCycleAreaScoreByThird" resultType="String"
+		flushCache="true">
+		SELECT max(cycle) cycle from area_score_hour where  manufacturer>0
+	</select> 
+
+	<!-- 地市 --><!-- 增加等级一级排序  2016-04-21-->
+	<select id="searchCurAreaScore" parameterType="map" resultType="map" flushCache="true">
+	
+	  <choose>
+	     <when test="flag=='true'">
+	             	select * from(SELECT
+						area_code,area_name,city_code,city_name,grade1_total,grade2_total,grade3_total,grade4_total,grade5_total,grade1
+					from
+						area_score_hour
+					where data_type=${dataType}  and manufacturer=0
+					 and  <![CDATA[ area_code<>107   ]]>
+					 and  <![CDATA[ area_code<>101   ]]>
+					<if test="areaCode !='' and areaCode !=null">
+						and area_code in(${areaCode})
+					</if>
+					<!-- 诺基亚的最新周期 -->
+					<if test="startDate !='' and startDate !=null">
+							and cycle=#{startDate}
+					 </if>
+					 union all
+					SELECT
+						area_code,area_name,city_code,city_name,grade1_total,grade2_total,grade3_total,grade4_total,grade5_total,grade1
+					from
+						area_score_hour
+					where data_type=${dataType}  and manufacturer>0
+					 and  <![CDATA[ area_code<>103   ]]>
+					 and  <![CDATA[ area_code<>111   ]]>
+					 <if test="areaCode !='' and areaCode !=null">
+						and area_code in(${areaCode})
+					</if>
+					 <!-- 第三方的最新周期 -->
+					<if test="endDate !='' and endDate !=null">
+							and cycle=#{endDate}
+					</if>
+					)a
+					ORDER BY a.grade1_total desc
+	     </when>
+	      <otherwise>
+	               SELECT a.area_code,a.area_name,a.city_code,a.city_name,
+	               ROUND(grade1_total / SUM(grade1_total + grade2_total + grade3_total + grade4_total + grade5_total)*100,2) AS grade1,
+	               grade1_total,grade2_total,grade3_total,grade4_total,grade5_total
+					  FROM
+						(
+							SELECT
+								area_code,area_name,city_code,city_name,
+								SUM(grade1_total) AS grade1_total,SUM(grade2_total) AS grade2_total,
+								SUM(grade3_total) AS grade3_total,SUM(grade4_total) AS grade4_total,
+								SUM(grade5_total) AS grade5_total
+							FROM
+								${tableName} GROUP BY ${groupBy}
+						) a  GROUP BY ${groupBy}
+	           
+	      </otherwise>
+	  
+	  </choose>
+	</select>
+	
+	<!-- 最差区县占比 -->
+	<select id="searchMaxCycleWorstArea" resultType="String" flushCache="true">
+		SELECT max(cycle) cycle from worst_rank_hour
+		<!-- select date_sub(max(cycle),interval 4 hour) from worst_rank_hour -->
+		<!-- select date_sub(DATE_FORMAT(NOW(),'%Y-%m-%d %H:%0:%0'),interval 4 hour) from worst_rank_hour LIMIT 1 -->
+	</select>
+	
+	<select id="searchCurWorstArea" resultType="map" parameterType="map" flushCache="true">
+		SELECT
+		area_code,area_name,city_code,city_name,grade1,rank,cycle,cycle_date,cycle_hour
+		from worst_rank_hour
+		<where>
+			<if test="lastCycle !='' and lastCycle!=null">
+				cycle=#{lastCycle}
+			</if>
+			<if test="areaCode !='' and areaCode !=null">
+				and area_code in(${areaCode})
+			</if>
+		</where>
+	</select>
+	
+	<select id="searchAreaScore" parameterType="map" resultType="map" flushCache="true">
+		SELECT
+		area_code,area_name,city_code,city_name,grade1,grade2,grade3,grade4,grade5,cycle_date,cycle_hour
+		from area_score_hour where data_type=0
+		<if test="cycle !='' and cycle !=null">
+			and cycle=#{cycle}
+		</if>
+		<if test="areaCode !='' and areaCode !=null">
+			and area_code=#{areaCode}
+		</if>
+	</select>
+
+	<select id="searchMaxCycleBtsScore" parameterType="String"  resultType="String"
+		flushCache="true">
+		SELECT max(cycle) cycle from bts_score_hour
+		<where>
+			<if test="_parameter !='' and _parameter!=null and  _parameter==0 ">
+				and manufacturer=0
+			</if>
+			<if test="_parameter !='' and _parameter!=null and  _parameter==1 ">
+				and manufacturer>0
+			</if>
+		</where>
+	</select>
+	<!-- 地图 -->
+	<select id="searchBtsGrade" parameterType="map" resultType="BtsProxy" flushCache="true">
+	   SELECT DISTINCT
+			area_code AS areaCode,
+			area_name AS areaName,
+			city_code AS cityCode,
+			city_name AS cityName,
+			ne_code AS bsNo,
+			ne_name_cn AS locateName,
+			total_score AS score,
+			grade AS star
+		FROM
+			bts_score_day 
+		WHERE 1=1
+		    <if test="areaCode !='' and areaCode !=null and areaCode !=0">
+	            AND  area_code=${areaCode}
+		     </if>
+	     	<if test="cityCode!='' and cityCode !=null and cityCode !=0">
+	            AND  city_code=#{cityCode}
+	     	</if>
+		    <if test="startDate  !='' and  startDate !=null">
+					AND  cycle_date>=#{startDate}
+			</if>
+			<if test="endDate  !='' and endDate !=null">
+					<![CDATA[ AND  cycle_date <= #{endDate}   ]]>
+			</if>
+			<if test="searchIndex  !='' and searchIndex !=null">
+			     AND  concat(ne_code, ',', ne_name_cn) like '%${searchIndex}%'
+			</if>
+			<if test="grade  !='' and grade !=null">
+			     AND  grade in(${grade})
+			</if>  
+		     order by star
+	</select>
+	
+	<select id="searchMaxCycleAreaScore"   parameterType="map"  resultType="String"
+		flushCache="true">
+		SELECT max(cycle) cycle from area_score_hour <where>
+			<if test="areaCode !='' and areaCode !=null">
+				and area_code=#{areaCode}
+			</if>
+		</where>
+	</select>
+	
+	<!-- 地市—点击到—> 折线 基站个数占比图 30天   -->
+	<select id="areaGradeSearch" parameterType="map"  resultType="map"  flushCache="true" >
+			SELECT  a.${column},a.area_code,a.area_name,a.city_code,a.city_name,
+					IFNULL(ROUND(a.grade1_total / b.total * 100,2),0) AS grade1,
+					IFNULL(ROUND(a.grade2_total / b.total * 100,2),0) AS grade2,
+					IFNULL(ROUND(a.grade3_total / b.total * 100,2),0) AS grade3,
+					IFNULL(ROUND(a.grade4_total / b.total * 100,2),0) AS grade4,
+					IFNULL(ROUND(a.grade5_total / b.total * 100,2),0) AS grade5
+			FROM(SELECT area_code,area_name,city_code,city_name,${column},SUM(grade1_total) AS grade1_total,
+			SUM(grade2_total) AS grade2_total,SUM(grade3_total) AS grade3_total,
+			SUM(grade4_total) AS grade4_total,SUM(grade5_total) AS grade5_total,0 AS le
+				FROM	${tableName}
+			WHERE 1=1 ${where}
+			<if test="year  !='' and  year !=null">
+					AND  cycle_year =#{year}
+			</if>
+			<if test="startDate  !='' and  startDate !=null">
+					AND  ${column} >=#{startDate}
+			</if>
+			<if test="endDate  !='' and endDate !=null">
+					<![CDATA[ AND  ${column} <= #{endDate}   ]]>
+			</if>
+			GROUP BY ${groupBy})a
+			LEFT JOIN (SELECT SUM(grade1_total+grade2_total+grade3_total+grade4_total+grade5_total) AS total,
+			${column},0 AS lt FROM ${tableName} 
+			WHERE 1=1 ${where}
+			<if test="year  !='' and  year !=null">
+					AND  cycle_year =#{year}
+			</if>
+			<if test="startDate  !='' and  startDate !=null">
+					AND  ${column} >=#{startDate}
+			</if>
+			<if test="endDate  !='' and endDate !=null">
+					<![CDATA[ AND  ${column} <= #{endDate}   ]]>
+			</if> 
+			GROUP BY ${groupBy}
+		
+		) b ON a.le = b.lt AND b.${column}=a.${column} GROUP BY ${groupBy}
+	</select>
+	
+		<!-- 地市 雷达图  各指标的平均扣分 -->
+	<select id="areaAvgScore" parameterType="map"  resultType="map">
+	SELECT
+		 	${round},area_code,area_name
+	 FROM(
+		SELECT
+			${sumParam},
+			area_code,area_name,0 as ls
+		FROM
+			${tableName}
+		WHERE
+			1=1
+		 <if test="areaCode !='' and areaCode !=null">
+	            AND  area_code in(${areaCode})
+	     </if>
+     	<if test="cityCode!='' and cityCode !=null">
+            AND  city_code=#{cityCode}
+     	</if>
+		<if test="year  !='' and  year !=null">
+				AND  cycle_year =#{year}
+		</if>
+		
+		<if test="neCode !='' and  neCode !=null">
+				AND  ne_code =#{neCode}
+		</if>
+		
+		<if test="startDate  !='' and  startDate !=null">
+				AND  ${column} >=#{startDate}
+		</if>
+		<if test="endDate  !='' and endDate !=null">
+				<![CDATA[ AND  ${column} <= #{endDate}   ]]>
+		</if>
+		<choose>
+		   <!-- <when test="tableName=='bts_score_hour'">
+		       	GROUP BY ne_code
+		   </when> -->
+		   <otherwise>
+		        <if test="dataType>0">
+		      	     GROUP BY ${groupBy}
+		        </if>
+		   </otherwise>
+		</choose>
+		)a LEFT JOIN ( SELECT count(*) as total,  0 as le
+         FROM
+			${tableName}
+		WHERE
+			1=1
+		 <if test="areaCode !='' and areaCode !=null">
+	            AND  area_code in(${areaCode})
+	     </if>
+     	<if test="cityCode!='' and cityCode !=null">
+            AND  city_code=#{cityCode}
+     	</if>
+		<if test="year  !='' and  year !=null">
+				AND  cycle_year =#{year}
+		</if>
+		
+		<if test="neCode !='' and  neCode !=null">
+				AND  ne_code =#{neCode}
+		</if>
+		
+		<if test="startDate  !='' and  startDate !=null">
+				AND  ${column} >=#{startDate}
+		</if>
+		<if test="endDate  !='' and endDate !=null">
+				<![CDATA[ AND  ${column} <= #{endDate}   ]]>
+		</if> 
+		)b ON a.ls=b.le
+
+	</select>
+	
+</mapper>	
+	
+	
+

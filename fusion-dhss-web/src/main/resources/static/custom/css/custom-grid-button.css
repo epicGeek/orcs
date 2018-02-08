@@ -1,0 +1,75 @@
+		.k-button.k-button-icontext.k-grid-edit, .k-button.k-button-icontext.k-grid-delete{
+			box-shadow: 0 1px 0 rgba(255, 255, 255, 0.15) inset, 0 1px 1px rgba(0, 0, 0, 0.075);
+			text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
+			border-radius: 3px;
+			font-size: 12px;
+			line-height: 1.5;
+			padding: 1px 5px;
+		}
+		
+		.k-button.k-button-icontext.k-grid-edit span, .k-button.k-button-icontext.k-grid-delete span {
+			display:none;
+		}
+		.k-button.k-button-icontext.k-grid-edit{
+			background-image: linear-gradient(to bottom, #5cb85c 0px, #419641 100%);
+			background-repeat: repeat-x;
+			border-color: #3e8f3e;
+			background-color: #5cb85c;
+			color: #FFF;
+		}
+		.k-button.k-button-icontext.k-grid-edit:hover{
+			background-image: linear-gradient(to bottom, #419641 0px, #419641 100%);
+			background-color: #419641;
+		}
+		
+		.k-button.k-button-icontext.k-grid-delete{
+			background-image: linear-gradient(to bottom, #d9534f 0px, #c12e2a 100%);
+			background-repeat: repeat-x;
+			border-color: #b92c28;
+			background-color: #d9534f;
+			color: #FFF;
+		}
+		.k-button.k-button-icontext.k-grid-delete:hover{
+			background-image: linear-gradient(to bottom, #c12e2a 0px, #c12e2a 100%);
+			background-color: #c12e2a;
+		}
+		.k-grid {
+        	font-size: 12px
+		}
+		
+		.k-button.k-button-icontext.k-grid-default{
+			height: 22px;
+			line-height: 1.5;
+			padding: 1px 10px;
+			border-radius: 3px;
+		}
+		.k-button.k-button-icontext.k-grid-button1{
+			height: 22px;
+			line-height: 1.5;
+			padding: 1px 10px;
+			border-radius: 3px;
+		}
+		.k-button.k-button-icontext.k-grid-button2{
+			height: 22px;
+			line-height: 1.5;
+			padding: 1px 10px;
+			border-radius: 3px;
+		}
+		.k-button.k-button-icontext.k-grid-button3{
+			height: 22px;
+			line-height: 1.5;
+			padding: 1px 10px;
+			border-radius: 3px;
+		}
+		.k-button.k-button-icontext.k-grid-button4{
+			height: 22px;
+			line-height: 1.5;
+			padding: 1px 10px;
+			border-radius: 3px;
+		}
+		.k-button.k-button-icontext.k-grid-button5{
+			height: 22px;
+			line-height: 1.5;
+			padding: 1px 10px;
+			border-radius: 3px;
+		}

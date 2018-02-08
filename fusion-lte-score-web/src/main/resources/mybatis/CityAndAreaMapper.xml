@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 地区 地市 -->
+<mapper namespace="com.nokia.ices.apps.fusion.score.repository.CityAndAreaRepository">
+
+	<select id="findCityList" resultType="map" parameterType="map" >
+	
+	     SELECT DISTINCT t.AREA_CODE areaCode,t.AREA_CN areaCn  from ices_area t where 1=1 
+	     <if test="areas.length>=1" >
+			and  t.AREA_CODE in 
+			<foreach item="item" index="index" collection="areas" open="(" separator="," close=")">#{item}</foreach>
+		</if>
+	     
+	</select>
+	
+	<select id="findAreaList" resultType="map">
+	   SELECT DISTINCT t.CITY_CODE cityCode,t.CITY_CN cityCn 
+	    from ices_area t where 1=1
+	   <if test="cityCode !='' and cityCode!=null" >
+		     AND  t.AREA_CODE = #{cityCode} 
+	    </if>
+	</select>
+	
+	<select id="findAreaExtList" resultType="map">
+	     SELECT t.area_name,t.area_code FROM system_area_ext t;
+	</select>
+	
+
+</mapper>	
+	

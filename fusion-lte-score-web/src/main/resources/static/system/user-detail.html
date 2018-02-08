@@ -1,0 +1,8 @@
+DetailTemplate: detail view for 
+<span>{{systemUser.userName}}</span>
+
+<img data-ng-src="{{systemUser.imageUrl}}">
+
+<ul data-ng-repeat="systemRole in systemUser.systemRole">
+	<span>{{systemRole.roleName}}</span>
+</ul>

@@ -1,0 +1,98 @@
+
+/* 绠�鍗曚俊鎭� 鎻愮ず妗� */
+.infoTip{
+	position: fixed;
+	z-index: 100000;
+}
+.infoTip-wrap{
+	position: relative;
+	line-height: 25px;
+	background: transparent;
+	color: #FFF;
+	font-size: 14px;
+	font-family: "Microsoft YaHei";
+	margin-bottom: 10px;
+	text-align: center;
+}
+.infoTip-bg{
+	height: 100%;
+	width: 100%;
+	background: #BA0101;
+	opacity: 0.8;
+	border-radius: 2px;
+}
+.infoTip-content{
+	min-width: 250px;
+	height: auto;
+	position: absolute;
+	z-index: 10002;
+	background: transparent;
+	z-index: 10002;
+	word-wrap:break-word; 
+	overflow:hidden;
+	top: 0px;
+	padding: 15px;
+}
+.infoTip-log{
+	position: absolute;
+	z-index: 10002;
+	width:0; 
+	height:0;
+	font-size:0;
+	/* border-width: 8px;
+	border-color: transparent transparent transparent #BA0101;
+	border-style:dashed dashed dashed solid; */
+	border-top: 8px solid transparent;
+	border-right: 8px solid transparent;
+	border-bottom: 8px solid transparent;
+	border-left: 10px solid #BA0101;
+	opacity: 0.8;
+}
+
+/*妯′豢confirm寮规*/
+.confirmWindowWrap{
+	min-width: 200px;
+	min-height: 180px;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	z-index: 10000;
+	background: #fff;
+	border-radius: 3px;
+	border:1px solid #ddd;
+	box-shadow: 0px 1px 10px 2px rgba(0,0,0,0.1)
+}
+.confirmWindowWrap>div{
+	width: 100%;
+}
+.confirmHeaderWrap{
+	height: 30px;
+	line-height: 30px;
+	border-bottom: 1px solid #e4e4e4;
+	padding: 0px 10px;
+	background-color: #F5F5F5;
+}
+.confirmContentWrap{
+	background: #fff;
+	padding: 15px 8px;
+	line-height: 28px;
+	font-size: 13px;
+}
+.confirmFooterWrap{
+	height: 40px;
+	border-top: 1px solid #e4e4e4;
+	text-align: right;
+}
+.confirmOKBtn, .confirmCancelBtn{
+	text-decoration: none;
+	background: #fff;
+	border: 1px solid #e4e4e4;
+	padding: 0 8px;
+	height: 24px;
+	line-height: 24px;
+	margin-top: 7px;
+	margin-right: 8px;
+}
+.confirmOKBtn:hover, .confirmCancelBtn:hover{
+	background: #F5F5F5;
+}

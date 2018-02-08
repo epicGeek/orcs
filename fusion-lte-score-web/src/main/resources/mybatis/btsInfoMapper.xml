@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 基站基础信息 + kpi图形指标列表   ,告警查询 ， 退服查询-->
+<mapper namespace="com.nokia.ices.apps.fusion.score.repository.BtsInformationCellRepository">
+
+	<select id="findBtsAll" parameterType="map" resultType="map">
+	   SELECT
+		    ta1.city_code,
+            ta1.area_code,
+            ta1.city_name,
+            ta1.area_name,
+			ta1.cell_name_cn,
+			ta1.cell_id,
+			ta1.ne_name_cn,
+			ta1.ne_code,
+			ta1.sector_id,
+			ta1.proxy_x,
+			ta1.proxy_y
+		FROM ices_cell ta1
+		<where>
+			<if test="neCode !='' and neCode!=null" >
+			    AND  ta1.ne_code = #{neCode} 
+		    </if>
+		    <if test="cityCode !='' and cityCode !=null" >   <!-- 区县 -->
+			     AND  ta1.city_code =#{cityCode}
+		    </if>
+		    <if test="areaCode !='' and areaCode!=null" >  <!-- 地市 -->
+			     AND  ta1.area_code in (${areaCode}) 
+		    </if>
+		    <if test="cellId !='' and cellId !=null" >
+		     	AND  ta1.cell_id = #{cellId} 
+	   	    </if>
+		</where>
+		 <if test="pageSize !='' and pageSize !=null" >
+	                LIMIT ${pageSize} OFFSET ${page}
+		 </if>
+	</select>
+	
+	<select id="findBtsCount" parameterType="map" resultType="Integer">
+
+ 		SELECT count(1)
+			
+		FROM
+			ices_cell ta1
+		WHERE
+			1 = 1
+        <if test="neCode !='' and neCode!=null" >
+		     AND  ta1.ne_code = #{neCode} 
+	    </if>
+	      <if test="cityCode !='' and cityCode !=null" >
+			     AND  ta1.CITY_CODE =#{cityCode}
+		    </if>
+		    <if test="areaCode !='' and areaCode!=null" >
+			     AND  ta1.AREA_CODE in (${areaCode}) 
+		    </if>
+		<if test="cellId !='' and cellId !=null" >
+		     AND  ta1.cell_id = #{cellId} 
+	    </if>
+	</select>
+	
+	<select id="findCityList" resultType="map">
+	     SELECT DISTINCT t.AREA_CODE areaCode,t.AREA_CN areaCn  from ices_area t;
+	</select>
+	
+	<select id="findAreaList" resultType="map">
+	   SELECT DISTINCT t.AREA_CODE areaCode, t.CITY_CODE cityCode,t.CITY_CN cityCn  from ices_area t
+	</select>
+	
+    <select id="findAllBtsProxyList" resultType="BtsProxy"  flushCache="true">
+	    SELECT DISTINCT ne_code as bsNo,ne_name_cn as locateName,proxy_x as proxyX,proxy_y as proxyY FROM ices_cell
+	    WHERE proxy_x IS NOT NULL AND proxy_y IS NOT NULL AND
+	     <![CDATA[  proxy_x <> 0 AND proxy_y <>0 AND proxy_x<>'' AND proxy_x<>'null' ]]>
+	     GROUP BY ne_code
+	</select>
+	
+	<!-- 告警查询 -->
+	<select id="findAlarmQueryAll" parameterType="map" resultType="map" flushCache="true">
+	
+	     SELECT
+		    ne_code,
+		    ne_name_cn,
+		    area_name,
+		    city_name,
+		    city_code,
+		    area_code,
+			alarm_title,
+			alarm_desc,
+		    cast(manufacturer as char) as manufacturer,
+		    DATE_FORMAT(cancel_time, '%Y-%m-%d %H:%i:%s')AS cancel_time,
+		    DATE_FORMAT(start_time, '%Y-%m-%d %H:%i:%s')AS start_time,
+		    sector_id,
+		    cycle,
+		    ${value}
+		FROM 
+			${tableName}
+		where 1=1
+		<if test="neCode !='' and  neCode !=null" >
+		     AND  ne_code = #{neCode} 
+	   	</if>
+	   	<if test="alarmTitle !='' and  alarmTitle !=null" >
+		     AND alarm_title = #{alarmTitle} 
+	   	</if>
+	   <if test="cityCode !='' and cityCode !=null" >
+		     AND  city_code = #{cityCode} 
+	    </if>
+	    <if test="areaCode !='' and areaCode!=null" >
+		     AND  area_code in( ${areaCode}) 
+	    </if>
+	    <if test="manufacturer !='' and manufacturer !=null" >
+		     AND  manufacturer = #{manufacturer} 
+	    </if>
+	    <if test="startDate !='' and startDate !=null" >
+		     AND  cycle >= #{startDate} 
+	    </if>
+	    <if test="startDate !='' and startDate !=null" >
+		     <![CDATA[ 
+		     	AND  cycle <= #{endDate} 
+		     ]]>
+	    </if>
+	    <if test="alarmDelay !='' and alarmDelay !=null" >
+	     	<![CDATA[ 
+		     	AND  ROUND(${value},2) >= ROUND(#{alarmDelay},2)
+		     ]]>
+	    </if>
+	    ORDER BY start_time DESC 
+		
+		<if test="pageSize !='' and pageSize !=null" >
+	                LIMIT ${pageSize} OFFSET ${page}
+		</if>
+	</select>
+	
+	<select id="findAlarmQueryCount" parameterType="map" resultType="Integer" flushCache="true">
+ 		SELECT
+		    count(1)
+		FROM 
+			${tableName}
+		where 1=1
+		<if test="neCode !='' and  neCode !=null" >
+		     AND  ne_code = #{neCode} 
+	   	</if>
+	   	<if test="alarmTitle !='' and  alarmTitle !=null" >
+		     AND alarm_title = #{alarmTitle} 
+	   	</if>
+	   	<if test="manufacturer !='' and manufacturer !=null" >
+		     AND   manufacturer = #{manufacturer} 
+	    </if>
+	   <if test="cityCode !='' and cityCode !=null" >
+		     AND  city_code = #{cityCode} 
+	    </if>
+	    <if test="areaCode !='' and areaCode!=null" >
+		     AND  area_code in( ${areaCode}) 
+	    </if>
+	    <if test="startDate !='' and startDate !=null" >
+		     AND  cycle >= #{startDate} 
+	    </if>
+	    <if test="endDate !='' and endDate !=null" >
+	     	<![CDATA[ 
+		     	AND  cycle <= #{endDate} 
+		     ]]>
+	    </if>
+	    <if test="alarmDelay !='' and alarmDelay !=null" >
+	     	<![CDATA[ 
+		     	AND  ROUND(${value},2) >= ROUND(#{alarmDelay},2) 
+		     ]]>
+	    </if>
+	</select>
+	
+	<!-- 退服查询 -->
+	<select id="findOutOfQueryAll" parameterType="map" resultType="map" flushCache="true">
+	
+	     SELECT
+		    ne_code,
+		    ne_name_cn,
+		    area_name,
+		    city_name,
+		    city_code,
+		    area_code,
+			alarm_title,
+			alarm_desc,
+		    cast(manufacturer as char) as manufacturer,
+		    DATE_FORMAT(cancel_time, '%Y-%m-%d %H:%i:%s')AS cancel_time,
+		    DATE_FORMAT(start_time, '%Y-%m-%d %H:%i:%s')AS start_time,
+		    sector_id,
+		    cycle,
+		    ${value}
+		FROM 
+			${tableName}
+		where 1=1
+		<if test="neCode !='' and  neCode !=null" >
+		     AND  ne_code = #{neCode} 
+	   	</if>
+	   	<if test="alarmTitle !='' and  alarmTitle !=null" >
+		     AND alarm_title = #{alarmTitle} 
+	   	</if>
+	   <if test="cityCode !='' and cityCode !=null" >
+		     AND  city_code = #{cityCode} 
+	    </if>
+	    <if test="areaCode !='' and areaCode!=null" >
+		     AND  area_code in( ${areaCode}) 
+	    </if>
+	    <if test="manufacturer !='' and manufacturer !=null" >
+		     AND  manufacturer = #{manufacturer} 
+	    </if>
+	    <if test="startDate !='' and startDate !=null" >
+		     AND  cycle >= #{startDate} 
+	    </if>
+	    <if test="startDate !='' and startDate !=null" >
+		     <![CDATA[ 
+		     	AND  cycle <= #{endDate} 
+		     ]]>
+	    </if>
+	    <if test="alarmDelay !='' and alarmDelay !=null" >
+	     	<![CDATA[ 
+		     	AND  ROUND(${value},2) >= ROUND(#{alarmDelay},2)
+		     ]]>
+	    </if>
+	    ORDER BY start_time DESC 
+		
+		<if test="pageSize !='' and pageSize !=null" >
+	                LIMIT ${pageSize} OFFSET ${page}
+		</if>
+	</select>
+	
+	<select id="findOutOfQueryCount" parameterType="map" resultType="Integer" flushCache="true">
+ 		SELECT
+		    count(1)
+		FROM 
+			${tableName}
+		where 1=1
+		<if test="neCode !='' and  neCode !=null" >
+		     AND  ne_code = #{neCode} 
+	   	</if>
+	   	<if test="alarmTitle !='' and  alarmTitle !=null" >
+		     AND alarm_title = #{alarmTitle} 
+	   	</if>
+	   	<if test="manufacturer !='' and manufacturer !=null" >
+		     AND   manufacturer = #{manufacturer} 
+	    </if>
+	   <if test="cityCode !='' and cityCode !=null" >
+		     AND  city_code = #{cityCode} 
+	    </if>
+	    <if test="areaCode !='' and areaCode!=null" >
+		     AND  area_code in( ${areaCode}) 
+	    </if>
+	    <if test="startDate !='' and startDate !=null" >
+		     AND  cycle >= #{startDate} 
+	    </if>
+	    <if test="endDate !='' and endDate !=null" >
+	     	<![CDATA[ 
+		     	AND  cycle <= #{endDate} 
+		     ]]>
+	    </if>
+	    <if test="alarmDelay !='' and alarmDelay !=null" >
+	     	<![CDATA[ 
+		     	AND  ROUND(${value},2) >= ROUND(#{alarmDelay},2) 
+		     ]]>
+	    </if>
+	</select>
+	
+</mapper>	
+	

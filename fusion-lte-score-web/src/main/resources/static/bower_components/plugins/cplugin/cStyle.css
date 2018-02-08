@@ -1,0 +1,50 @@
+
+/* 简单信息 提示框 */
+.infoTip{
+	position: fixed;
+	z-index: 2000;
+}
+.infoTip-wrap{
+	position: relative;
+	line-height: 25px;
+	background: transparent;
+	color: #FFF;
+	font-size: 14px;
+	font-family: "Microsoft YaHei";
+	margin-bottom: 10px;
+	text-align: center;
+}
+.infoTip-bg{
+	height: 100%;
+	width: 100%;
+	background: #BA0101;
+	opacity: 0.8;
+	border-radius: 2px;
+}
+.infoTip-content{
+	min-width: 250px;
+	height: auto;
+	position: absolute;
+	z-index: 10002;
+	background: transparent;
+	z-index: 10002;
+	word-wrap:break-word; 
+	overflow:hidden;
+	top: 0px;
+	padding: 15px;
+}
+.infoTip-log{
+	position: absolute;
+	z-index: 10002;
+	width:0; 
+	height:0;
+	font-size:0;
+	/* border-width: 8px;
+	border-color: transparent transparent transparent #BA0101;
+	border-style:dashed dashed dashed solid; */
+	border-top: 8px solid transparent;
+	border-right: 8px solid transparent;
+	border-bottom: 8px solid transparent;
+	border-left: 10px solid #BA0101;
+	opacity: 0.8;
+}

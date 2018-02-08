@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+	<head lang="zh-cn">
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="shortcut icon" href="../assets/images/favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="../assets/plugins/bootstrap-3.3.2-dist/css/bootstrap.css" />
+
+		<link rel="stylesheet" href="../assets/plugins/kendoui2015.1.318/styles/kendo.common.min.css" />
+		<link rel="stylesheet" href="../assets/plugins/kendoui2015.1.318/styles/kendo.silver.min.css" />
+
+		<link rel="stylesheet" href="../assets/plugins/cplugin/cStyle.css">
+
+		<link rel="stylesheet" href="../assets/css/nsn-home-style.css">
+
+		<script src="../assets/plugins/jquery/jquery-1.11.1.min.js"></script>
+
+		<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!--[if lt IE 9]>
+		<script src="../assets/plugins/jquery/html5shiv.min.js"></script>
+		<script src="../assets/plugins/jquery/respond.min.js"></script>
+		<![endif]-->
+		<script src="../assets/plugins/cplugin/jquery.easing.1.3.js"></script>
+		<script src="../assets/plugins/cplugin/cjs.js"></script>
+		<title>NOKIA DHSS智能运维平台</title>
+		<style type="text/css" media="screen">
+			.detailsStyle li{
+				word-break: break-all;
+			}
+			.detailsStyle label{
+				font-size:14px;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<!--顶部-->
+		<div class="nav navbar navbar-fixed-top navBox">
+			<div class="container-fluid">
+				<div class="col-md-6 col-sm-6 col-xs-12">
+					<a href="../home.html"><img src="../assets/n-images/nLogo.png" class="img-responsive" /></a>
+				</div>
+				<div class="com-md-6 col-sm-6 col-xs-12">
+
+					<div id='account' class="pull-right">
+						<a title="修改密码">Admin</a>&nbsp;&nbsp;
+						<a title="退出" href="../login.html"><i class="glyphicon glyphicon-log-out"></i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--顶部导航栏-->
+		<div class="n-nav n-nav-bg">
+	        <div class="container-fluid">
+	            <div class="row noMarginTop noMarginBottom">
+	                <div class="col-md-2 col-sm-3 col-xs-10">
+	                    <div class="clearfix">
+	                        <div class="n-navbar-title">
+	                            <a role="button" class="btn n-icon n-icon-32 n-icon-color3" href="../home.html">
+	                                <i class="glyphicon glyphicon-menu-left"></i>
+	                            </a>
+	                            &nbsp;
+	                            <font id="parentMenuName">智能运维</font>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div style="float:right; _position:relative;" class="col-md-offset-1 col-md-9 col-sm-9 col-xs-14">
+	                    <div class="n-navbar-nav clearfix" id="topNavListWrap">
+	                        <div id="topNavList">
+	                            <ul class="nav navbar-nav" id="navList">
+	                                <li><a href="overallIndicator.html">总体指标</a></li>
+	                                <li><a href="indicatorMonitor.html">指标监控</a></li>
+	                                <li><a href="oneKeyBackup.html">一键备份</a></li>
+	                                <li><a href="alarmMonitor.html" class="active">告警监控</a></li>
+	                                <li><a href="intelligentInspection.html">智能巡检</a></li>
+	                                <li><a href="nodeSwitching.html">单元倒换</a></li>
+	                                <li><a href="neSwitching.html">网元倒换</a></li>
+	                            </ul>
+	                        </div>
+	                        <button class="btn btn-info" id="overFlowBtn" style="display: none;">
+	                            <span class="glyphicon glyphicon-align-justify"></span>
+	                        </button>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+		<!--//顶部导航栏-->
+
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-12">
+					<nav style="padding: 0px 0px 10px 0px">
+	                    <ul class="nav nav-tabs">
+	                        <li><a href="alarmMonitor.html">活动告警</a></li>
+	                        <li class="active"><a href="alarmMonitor_history.html">历史告警</a></li>
+	                    </ul>
+	                </nav>
+					<div class="form-inline">
+						<!-- <div class="form-group form-group-sm">
+							<label>选择</label>
+							<input type="radio" name='group1' id='activeAlarmRadio' checked="true">
+							<label for="activeAlarmRadio" style='text-align:left;'>活动告警</label>
+							<input type="radio" name='group1' id='cancelAlarmRadio'>
+							<label for="cancelAlarmRadio" style='text-align:left;'>取消告警</label>
+						</div> -->
+						<div class="form-group form-group-sm">
+							<label>选择单元</label>
+							<select class="form-control">
+								<option value="">全部</option>
+								<option value="">SHHSS50SG01-ESA40-1</option>
+								<option value="">SHHSS50SG01-ESA40-0</option>
+							</select>
+						</div>
+						<div class="form-group form-group-sm">
+							<label>单元</label>
+							<input type="text" class="form-control" placeholder='根据单元模糊查询'>
+						</div>
+						<div class="form-group form-group-sm">
+							<label>告警ID</label>
+							<input type="text" class="form-control" placeholder='根据告警ID进行查询'>
+						</div>
+						<div class="form-group form-group-sm">
+							<label>告警号</label>
+							<input type="text" class="form-control" placeholder='根据告警号进行查询'>
+						</div>
+						<div class="form-group form-group-sm">
+							<label for="">时间范围</label>
+							<input id='startTime' type="text"> - 
+							<input id='endTime' type="text">
+						</div>
+						<div class="form-group form-group-sm">
+							<button type="submit" class="btn btn-primary btn-sm"><i class="glyphicon glyphicon-search"></i> 查询</button>
+							<button type="submit" class="btn btn-default btn-sm"><i class="glyphicon glyphicon-repeat"></i> 重置</button>
+							<button type="submit" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-export"></i> 导出</button>
+						</div>
+					</div>
+					<div id="dataGrid"></div>
+					<script type="text/x-kendo-template" id="template">
+		                <div class='detailsStyle'>
+		                	<h4>基本信息：</h4>
+		                            <ul>
+		                                <li><label>网元名称：</label>#= neName #</li>
+		                                <li><label>网元CODE：</label>#= neCode #</li>
+		                                <li><label>NOTIFY ID：</label>#= id #</li>
+		                                <li><label>附加信息：</label>#= addInfo #</li>
+		                                <li><label>USER INFO：</label>#= userInfo #</li>
+		                                <li><label>告警内容：</label>#= content #</li>
+		                                <li><label>告警描述：</label>#= desc #</li>
+		                            </ul>
+		                </div>
+		            </script>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+
+		<!--内容部分-->
+
+		<!--底部-->
+		<div class="n-footer ">
+			<div class="container ">
+				<div class="footer-bottom ">
+					The system developed by Nokia
+				</div>
+			</div>
+		</div>
+		<!--//底部-->
+
+		<script type="text/javascript" src="../assets/plugins/bootstrap-3.3.2-dist/js/bootstrap.js"></script>
+
+		<!-- echarts -->
+		<script type="text/javascript" src="../assets/plugins/echarts-2.2.5/dist/echarts-all.js"></script>
+
+		<script type="text/javascript" src="../assets/plugins/kendoui2015.1.318/js/kendo.all.min.js"></script>
+		<script type="text/javascript" src="../assets/plugins/kendoui2015.1.318/js/cultures/kendo.culture.zh-CN.min.js"></script>
+		<script type="text/javascript" src="../assets/plugins/kendoui2015.1.318/js/messages/kendo.messages.zh-CN.min.js"></script>
+
+		<script type="text/javascript" src="../assets/js/nav.js"></script>
+		<script src="../assets/js/intelligentOperation/alarmMonitor_history.js"></script>
+
+	</body>
+
+</html>

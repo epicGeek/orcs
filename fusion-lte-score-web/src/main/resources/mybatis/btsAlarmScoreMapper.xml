@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.nokia.ices.apps.fusion.score.repository.BtsPerformanceAlarmScoreRepository">
+
+	<!-- 健康度评分 基站性能告警得分 -->
+	<select id="findBtsPerformanceAlarmScoreAll" parameterType="map"
+		resultType="map" flushCache="true">
+		     SELECT
+				ta1.city_name,
+				ta1.ne_code,
+				ta1.area_name,
+				ta1.area_code,
+				ta1.city_code,
+				ta1.ne_name_cn,
+				ta1.score,
+				ta1.frequency_score AS frequencyScore,
+				ta1.delay_score AS  delayScore,
+				cast(ta1.manufacturer as char) as manufacturer,
+				DATE_FORMAT(ta1.cycle,'%Y-%m-%d %H:%i:%s') cycle
+			FROM
+					bts_alarm_score ta1
+					WHERE
+					1 = 1 
+				<if test="neCode !='' and neCode!=null">
+					   AND ta1.ne_code=#{neCode}
+				</if>
+				<if test="cityCode !='' and cityCode !=null">
+						AND ta1.city_code = #{cityCode}
+				</if>
+				<if test="areaCode !='' and areaCode!=null">
+						AND ta1.area_code in( ${areaCode})
+				</if>
+		  		<if test="cycleStart !='' and cycleStart !=null">
+			           <![CDATA[ 
+					      AND ta1.cycle >= #{cycleStart}
+					   ]]>
+				</if>
+				<if test="cycleEnd !='' and cycleEnd !=null">
+				      <![CDATA[ 
+					      AND ta1.cycle <=#{cycleEnd}
+					    ]]>
+				</if>
+				 <if test="score !='' and score !=null">
+			           <![CDATA[ 
+					      AND ta1.score >= #{score}
+					   ]]>
+				</if>
+				
+			<!-- 	<if test="cycleDate !='' and cycleDate!=null">
+					AND ta1.cycle_date = #{cycleDate}
+				</if>
+				<if test="cycleDate =='' or cycleDate==null">
+					AND ta1.cycle_date = CURRENT_DATE()
+				</if> -->
+			<!-- GROUP BY ta1.ne_code -->
+			ORDER BY ta1.cycle DESC
+
+		<!-- 分页 -->
+		<if test="pageSize !='' and pageSize !=null">
+			LIMIT ${pageSize} OFFSET ${page}
+		</if>
+	</select>
+
+	<select id="findBtsPerformanceAlarmScoreCount" parameterType="map"
+		resultType="Integer" flushCache="true">
+
+		SELECT
+				count(1)
+			FROM
+					bts_alarm_score ta1
+					WHERE
+					1 = 1 
+				<if test="neCode !='' and neCode!=null">
+					   AND ta1.ne_code=#{neCode}
+				</if>
+				<if test="cityCode !='' and cityCode !=null">
+						AND ta1.city_code = #{cityCode}
+				</if>
+				<if test="areaCode !='' and areaCode!=null">
+						AND ta1.area_code in( ${areaCode})
+				</if>
+		  		<if test="cycleStart !='' and cycleStart !=null">
+			           <![CDATA[ 
+					      AND ta1.cycle >= #{cycleStart}
+					   ]]>
+				</if>
+				<if test="cycleEnd !='' and cycleEnd !=null">
+				      <![CDATA[ 
+					      AND ta1.cycle <= #{cycleEnd}
+					    ]]>
+				</if>
+				<if test="score !='' and score !=null">
+			           <![CDATA[ 
+					      AND ta1.score >= #{score}
+					   ]]>
+				</if>
+				<!-- <if test="cycleDate !='' and cycleDate!=null">
+					AND ta1.cycle_date = #{cycleDate}
+				</if>
+				<if test="cycleDate =='' or cycleDate==null">
+					AND ta1.cycle_date = CURRENT_DATE()
+				</if> -->
+	</select>
+	<!-- ================明细======================== -->
+	<select id="findBtsAlarmNo" parameterType="map"
+		resultType="map" flushCache="true">
+		SELECT
+			a.ne_code,
+		  	a.alarm_no,
+			a.manufacturer,
+			a.f AS freScore,
+			a.d AS delayScore,
+			DATE_FORMAT(a.startTime,'%Y-%m-%d %H:%i:%s') as startTime
+		FROM
+			(
+			SELECT
+	     		 cycle,
+				 ne_code,
+	     		 alarm_no,
+				 manufacturer,
+				 score AS f,
+				 0 AS d,
+				 0 as startTime
+			FROM
+				bts_frequency_alarm_score
+			where 1=1 
+		<if test="neCode !='' and neCode!=null">
+			AND ne_code = #{neCode}
+		</if>
+		<if test="cycle !='' and cycle !=null">
+			AND cycle = #{cycle}
+		</if>
+	UNION ALL
+				SELECT
+	        		cycle,
+					ne_code,
+	        		alarm_no,
+					manufacturer,
+					0,
+					score AS d,
+					start_time as startTime
+				FROM
+					bts_delay_alarm_score
+		 WHERE 1=1
+		<if test="neCode !='' and neCode!=null">
+			AND ne_code = #{neCode}
+		</if>
+		<if test="cycle !='' and cycle !=null">
+			AND cycle = #{cycle}
+		</if>
+		) a
+		 <!-- 分页 -->
+		<if test="pageSize !='' and pageSize !=null">
+			LIMIT ${pageSize} OFFSET ${page}
+		</if>
+	</select>
+	
+	<select id="findBtsAlarmNoCount" parameterType="map"
+		resultType="Integer" flushCache="true">
+			SELECT
+				count(1)
+			FROM
+				(
+				SELECT
+		     		 cycle,
+					 ne_code,
+		     		 alarm_no,
+					 manufacturer,
+					 score AS f,
+					 0 AS d,
+					  0 as startTime
+				FROM
+					bts_frequency_alarm_score
+				
+				UNION ALL
+					SELECT
+		        		cycle,
+						ne_code,
+		        		alarm_no,
+						manufacturer,
+						0,
+						score AS d,
+						start_time as startTime
+					FROM
+						bts_delay_alarm_score
+					
+			) a  WHERE 1=1
+		<if test="neCode !='' and neCode!=null">
+			AND a.ne_code = #{neCode}
+		</if>
+		<if test="cycle !='' and cycle !=null">
+			AND a.cycle = #{cycle}
+		</if>
+	</select>
+	
+</mapper>	
+	

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
+	updateCheck="false">
+	<diskStore path="java.io.tmpdir/EhCache_tmp" />
+	<defaultCache eternal="false" 
+		maxElementsInMemory="10000"
+		overflowToDisk="false" 
+		diskPersistent="false"
+		timeToIdleSeconds="0"
+		timeToLiveSeconds="600" 
+		memoryStoreEvictionPolicy="LRU" />
+
+	<cache name="com.nokia.ices.apps.fusion.system.domain.SystemUser" eternal="false" 
+		maxElementsInMemory="1000"
+		overflowToDisk="false" 
+		diskPersistent="false" 
+		timeToIdleSeconds="0"
+		timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LRU" />
+	<cache name="com.nokia.ices.apps.fusion.command.domain.CommandCheckItem" eternal="false" 
+		maxElementsInMemory="1000"
+		overflowToDisk="false" 
+		diskPersistent="false" 
+		timeToIdleSeconds="0"
+		timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LRU" />
+	<cache name="com.nokia.ices.apps.fusion.system.domain.SystemRole" eternal="false" 
+		maxElementsInMemory="1000"
+		overflowToDisk="false" 
+		diskPersistent="false" 
+		timeToIdleSeconds="0"
+		timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LRU" />
+	<cache name="com.nokia.ices.apps.fusion.system.domain.SystemResource" eternal="false" 
+		maxElementsInMemory="1000"
+		overflowToDisk="false" 
+		diskPersistent="false" 
+		timeToIdleSeconds="0"
+		timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LRU" />
+	<cache name="com.nokia.ices.apps.fusion.equipment.domain.EquipmentNe" eternal="false" 
+		maxElementsInMemory="1000"
+		overflowToDisk="false" 
+		diskPersistent="false" 
+		timeToIdleSeconds="0"
+		timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LRU" />
+	<cache name="com.nokia.ices.apps.fusion.equipment.domain.EquipmentUnit" eternal="false" 
+		maxElementsInMemory="1000"
+		overflowToDisk="false" 
+		diskPersistent="false" 
+		timeToIdleSeconds="0"
+		timeToLiveSeconds="600"
+		memoryStoreEvictionPolicy="LRU" />
+</ehcache>

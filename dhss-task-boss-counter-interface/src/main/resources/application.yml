@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url : jdbc:mysql://localhost:3306/boss_revolution_cuc?characterEncoding=UTF-8&rewriteBatchedStatements=true&verifyServerCertificate=false&useSSL=false
+    username : root
+    password : root
+    tomcat:
+      default-auto-commit: false
+      validation-interval: 1000
+      validation-query: select 1
+      test-on-borrow: true
+      test-while-idle: true
+      time-between-eviction-runs-millis: 3600000
+      min-evictable-idle-time-millis: 600000
+    jmx-enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+  boss:
+    counter:
+      interval-min: 5
+      boss-version: unicom
+      json-file-out-put-dir: E:/bossdata/zj-boss/output_data
+      counter-work-space-dir: E:/bossdata/zj-boss/workspace
+      rsync-data-dir: E:/bossdata/zj-boss/rsync-data

@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.nokia.ices.apps.fusion.score.repository.AreaScoreRepository">
+
+
+	<!-- 地区评分 -->
+	<select id="queryAreaScoreList" parameterType="map" resultType="map"
+		flushCache="true">
+		SELECT cycle_year,cycle_month,case when data_type=1 then 0 else
+		area_name end as area_name,
+		case when data_type=1 then 0 when
+		data_type=2 then 1 else city_name end as
+		city_name,grade1,grade2,grade3,grade4,grade5,data_type,
+		${row} FROM ${tableName} ta1
+		<where>
+
+			<if test="areaCode !='' and areaCode!=null">
+				AND ta1.area_code in( ${areaCode})
+			</if>
+			<if test="cityCode !='' and cityCode!=null">
+				AND ta1.city_code = #{cityCode}
+			</if>
+			<if test="dataType !='' and dataType != null">
+				AND ta1.data_type = #{dataType}
+			</if>
+			<choose>
+				<when test="scoreType == 1">
+					<if test="startDate !='' and startDate != null">
+			              <![CDATA[ AND ta1.cycle >= #{startDate} ]]>
+					</if>
+					<if test="endDate !='' and endDate != null">
+	                      <![CDATA[  AND  ta1.cycle <= #{endDate} ]]>
+					</if>
+				</when>
+				<when test="scoreType == 2">
+				   <if test="startDate !='' and startDate != null">
+			              <![CDATA[ AND ta1.cycle_date >= #{startDate} ]]>
+					</if>
+					<if test="endDate !='' and endDate != null">
+	                      <![CDATA[  AND  ta1.cycle_date <= #{endDate} ]]>
+					</if>
+				</when>
+				<when test="scoreType == 3">
+				   <if test="year !='' and year != null">
+			              <![CDATA[ AND ta1.cycle_year_of_week = #{year} ]]>
+					</if>
+					<if test="startDate !='' and startDate != null">
+			              <![CDATA[ AND ta1.cycle_week >= #{startDate} ]]>
+					</if>
+					<if test="endDate !='' and endDate != null">
+	                      <![CDATA[  AND  ta1.cycle_week <= #{endDate} ]]>
+					</if>
+				</when>
+				<when test="scoreType == 4">
+				  <if test="year !='' and year != null">
+			              <![CDATA[ AND ta1.cycle_year = #{year} ]]>
+					</if>
+					<if test="startDate !='' and startDate != null">
+			              <![CDATA[ AND ta1.cycle_month >= #{startDate} ]]>
+					</if>
+					<if test="endDate !='' and endDate != null">
+	                      <![CDATA[  AND  ta1.cycle_month <= #{endDate} ]]>
+					</if>
+				</when>
+				<otherwise>
+				</otherwise>
+			</choose>
+		</where>
+		ORDER BY ${orderBy} area_code,city_code,grade1 desc
+		<!-- 分页 -->
+		<choose>
+			<when test="isExport == ''  or isExport == null ">
+				limit ${limit} offset ${offset}
+			</when>
+		</choose>
+
+
+	</select>
+
+	<select id="findAreaScoreCount" parameterType="map" resultType="Integer"
+		flushCache="true">
+
+		SELECT count(1) FROM ${tableName} ta1
+		<where>
+
+			<if test="areaCode !='' and areaCode!=null">
+				AND ta1.area_code in( ${areaCode})
+			</if>
+			<if test="cityCode !='' and cityCode!=null">
+				AND ta1.city_code = #{cityCode}
+			</if>
+			<if test="dataType !='' and dataType != null">
+				AND ta1.data_type = #{dataType}
+			</if>
+			<choose>
+				<when test="scoreType == 1">
+					<if test="startDate !='' and startDate != null">
+			              <![CDATA[ AND ta1.cycle >= #{startDate} ]]>
+					</if>
+					<if test="endDate !='' and endDate != null">
+	                      <![CDATA[  AND  ta1.cycle <= #{endDate} ]]>
+					</if>
+				</when>
+				<when test="scoreType == 2">
+				   <if test="startDate !='' and startDate != null">
+			              <![CDATA[ AND ta1.cycle_date >= #{startDate} ]]>
+					</if>
+					<if test="endDate !='' and endDate != null">
+	                      <![CDATA[  AND  ta1.cycle_date <= #{endDate} ]]>
+					</if>
+				</when>
+				<when test="scoreType == 3">
+				   <if test="year !='' and year != null">
+			              <![CDATA[ AND ta1.cycle_year_of_week = #{year} ]]>
+					</if>
+					<if test="startDate !='' and startDate != null">
+			              <![CDATA[ AND ta1.cycle_week >= #{startDate} ]]>
+					</if>
+					<if test="endDate !='' and endDate != null">
+	                      <![CDATA[  AND  ta1.cycle_week <= #{endDate} ]]>
+					</if>
+				</when>
+				<when test="scoreType == 4">
+				  <if test="year !='' and year != null">
+			              <![CDATA[ AND ta1.cycle_year = #{year} ]]>
+					</if>
+					<if test="startDate !='' and startDate != null">
+			              <![CDATA[ AND ta1.cycle_month >= #{startDate} ]]>
+					</if>
+					<if test="endDate !='' and endDate != null">
+	                      <![CDATA[  AND  ta1.cycle_month <= #{endDate} ]]>
+					</if>
+				</when>
+				<otherwise>
+				</otherwise>
+			</choose>
+		</where>
+
+	</select>
+	
+	<!-- ==========================评分故障原因统计======================= -->
+	<!-- 新增需求：增加地市和区县 2016-04-28-->
+	<select id="queryBreakReasonList" parameterType="map"
+		flushCache="true" resultType="map">
+		SELECT
+		area_code,area_name,city_code,city_name,cycle_year,cycle_month,
+		<foreach collection="list" index="index" item="tag"  separator=","  >
+			  ${tag} as #{tag}
+		</foreach>
+		,alarm,outof,${row} FROM ${tableName} ta1
+		
+		<where>
+		 	<!-- <![CDATA[manufacturer<>5]]> -->
+			<if test="areaCode !='' and areaCode!=null">
+				AND ta1.area_code in( ${areaCode})
+			</if>
+			<if test="cityCode !='' and cityCode != null">
+			     AND ta1.city_code = #{cityCode}
+			</if>
+			
+			<!-- choose 如果if条件成立则跳出choose如果不成立走下一条 -->
+			<choose>
+				<when test="scoreType == 1">
+					<if test="startDate !='' and startDate != null">
+			              <![CDATA[ AND ta1.cycle >= #{startDate} ]]>
+					</if>
+					<if test="endDate !='' and endDate != null">
+	                      <![CDATA[  AND  ta1.cycle <= #{endDate} ]]>
+					</if>
+				</when>
+				<when test="scoreType == 2">
+				   <if test="startDate !='' and startDate != null">
+			              <![CDATA[ AND ta1.cycle_date >= #{startDate} ]]>
+					</if>
+					<if test="endDate !='' and endDate != null">
+	                      <![CDATA[  AND  ta1.cycle_date <= #{endDate} ]]>
+					</if>
+				</when>
+				<when test="scoreType == 3">
+				   <if test="year !='' and year != null">
+			              <![CDATA[ AND ta1.cycle_year_of_week = #{year} ]]>
+					</if>
+					<if test="startDate !='' and startDate != null">
+			              <![CDATA[ AND ta1.cycle_week >= #{startDate} ]]>
+					</if>
+					<if test="endDate !='' and endDate != null">
+	                      <![CDATA[  AND  ta1.cycle_week <= #{endDate} ]]>
+					</if>
+				</when>
+				<when test="scoreType == 4">
+				  <if test="year !='' and year != null">
+			              <![CDATA[ AND ta1.cycle_year = #{year} ]]>
+					</if>
+					<if test="startDate !='' and startDate != null">
+			              <![CDATA[ AND ta1.cycle_month >= #{startDate} ]]>
+					</if>
+					<if test="endDate !='' and endDate != null">
+	                      <![CDATA[  AND  ta1.cycle_month <= #{endDate} ]]>
+					</if>
+				</when>
+
+				<otherwise>
+				</otherwise>
+			</choose>
+
+		</where>
+		ORDER BY ${groupBy} DESC
+		<!-- 分页 -->
+		<choose>
+			<when test="isExport == ''  or isExport == null ">
+				limit ${limit} offset ${offset}
+			</when>
+		</choose>
+	</select>
+
+	<select id="findBreakReasonCount" parameterType="map"
+		resultType="Integer">
+
+		SELECT count(1) FROM ${tableName} ta1
+		
+		<where>
+		 	<!-- <![CDATA[ta1.manufacturer<>5]]> -->
+			<if test="areaCode !='' and areaCode!=null">
+				AND ta1.area_code in( ${areaCode})
+			</if>
+			<if test="cityCode !='' and cityCode != null">
+			     AND ta1.city_code = #{cityCode}
+			</if>
+			
+			<!-- choose 如果if条件成立则跳出choose如果不成立走下一条 -->
+			<choose>
+				<when test="scoreType == 1">
+					<if test="startDate !='' and startDate != null">
+			              <![CDATA[ AND ta1.cycle >= #{startDate} ]]>
+					</if>
+					<if test="endDate !='' and endDate != null">
+	                      <![CDATA[  AND  ta1.cycle <= #{endDate} ]]>
+					</if>
+				</when>
+				<when test="scoreType == 2">
+				   <if test="startDate !='' and startDate != null">
+			              <![CDATA[ AND ta1.cycle_date >= #{startDate} ]]>
+					</if>
+					<if test="endDate !='' and endDate != null">
+	                      <![CDATA[  AND  ta1.cycle_date <= #{endDate} ]]>
+					</if>
+				</when>
+				<when test="scoreType == 3">
+				   <if test="year !='' and year != null">
+			              <![CDATA[ AND ta1.cycle_year_of_week = #{year} ]]>
+					</if>
+					<if test="startDate !='' and startDate != null">
+			              <![CDATA[ AND ta1.cycle_week >= #{startDate} ]]>
+					</if>
+					<if test="endDate !='' and endDate != null">
+	                      <![CDATA[  AND  ta1.cycle_week <= #{endDate} ]]>
+					</if>
+				</when>
+				<when test="scoreType == 4">
+				  <if test="year !='' and year != null">
+			              <![CDATA[ AND ta1.cycle_year = #{year} ]]>
+					</if>
+					<if test="startDate !='' and startDate != null">
+			              <![CDATA[ AND ta1.cycle_month >= #{startDate} ]]>
+					</if>
+					<if test="endDate !='' and endDate != null">
+	                      <![CDATA[  AND  ta1.cycle_month <= #{endDate} ]]>
+					</if>
+				</when>
+
+				<otherwise>
+				</otherwise>
+			</choose>
+		</where>
+	</select>
+</mapper>	
+	
+	
+

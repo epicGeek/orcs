@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.nokia.ices.apps.fusion.score.repository.AlarmDelayAndFrequencyRepository">
+  
+  <!-- 查询最新统计方式数据 -->
+  <select id="MaxDate" resultType="String" flushCache="true">
+		SELECT max(date_day) period_date from ${tableName}
+	</select>
+	
+    <!-- 总体呈现===告警总时长占比 饼状图 -->
+   <select id="findAlarmDelayPie" parameterType="map" resultType="map" flushCache="true">
+		SELECT a.*
+		FROM
+			(
+				SELECT
+					ta2.area_name,
+					ta2.city_name,
+					ta2.area_code,
+					ta2.city_code,
+					ROUND(SUM(ta2.difftime), 2) AS difftime
+				FROM
+					(
+						SELECT
+							ta1.area_name,
+							ta1.area_code,
+							ta1.city_code,
+							ta1.city_name,
+							MAX(ta1.difftime) AS difftime
+						FROM
+							${tableName} ta1
+						WHERE
+							1 = 1
+							<![CDATA[ 
+						        AND ta1.area_code <> 'null'
+						   ]]>
+						<if test="areaCode !='' and areaCode!=null">
+							AND ta1.area_code in( ${areaCode})
+						</if>
+						<choose>
+							<when test="tableName=='bts_alarm_delay_day'">
+								<![CDATA[  AND  ta1.date_day >= #{startDate} AND  ta1.date_day <= #{endDate} ]]>
+							</when>
+							<otherwise>
+									<![CDATA[ AND ta1.date_day = #{period_date}]]>
+							</otherwise>
+						</choose>
+							GROUP BY
+								ta1.ne_code,
+								ta1.alarm_no
+						) ta2
+				GROUP BY ${type}
+				UNION ALL
+					SELECT
+						'1' AS area_name,
+						'1' AS city_name,
+						'1' AS area_code,
+						'1' AS city_code,
+						ROUND(SUM(ta3.difftime), 2) AS difftime
+					FROM
+						(
+							SELECT
+								ta2.area_code,
+								ta2.city_code,
+								ROUND(SUM(ta2.difftime), 2) AS difftime
+							FROM
+								(
+									SELECT
+										ta1.area_code,
+										ta1.city_code,
+										MAX(ta1.difftime) AS difftime
+									FROM
+							  			 ${tableName} ta1
+									WHERE 1 = 1
+									<![CDATA[
+						                   AND ta1.area_code <> 'null'
+									   ]]>
+									<if test="areaCode !='' and areaCode!=null">
+										AND ta1.area_code in(${areaCode})
+									</if>
+									<choose>
+										<when test="tableName=='bts_alarm_delay_day'">
+											<![CDATA[  AND  ta1.date_day >= #{startDate} AND  ta1.date_day <= #{endDate} ]]>
+										</when>
+										<otherwise>
+												<![CDATA[  AND ta1.date_day = #{period_date} ]]>
+										</otherwise>
+									</choose>
+									GROUP BY
+									ta1.ne_code,
+									ta1.alarm_no
+							) ta2
+							GROUP BY ${type}
+						) ta3
+			) a
+	</select>
+   
+   <!--总体呈现===告警总时长排名   柱状图 -->
+   <select id="findAlarmDelayBarChart" parameterType="map" resultType="map" flushCache="true">
+   		SELECT
+   			ta2.city_name,
+			ta2.city_code,
+			ta2.area_code,
+			ta2.area_name,
+   			ROUND(SUM(ta2.difftime),2) AS difftime
+   		FROM(
+				SELECT
+					ta1.city_name,
+					ta1.city_code,
+					ta1.area_code,
+					ta1.area_name,
+					MAX(ta1.difftime) AS difftime
+			    FROM
+					${tableName} ta1
+				WHERE
+					1 = 1
+				<if test="areaCode !='' and areaCode!=null">
+					AND ta1.area_code in(${areaCode})
+				</if>
+				<!-- 默认查询最大周期的数据 -->
+				<choose>
+					<when test="tableName=='bts_alarm_delay_day'">
+						<![CDATA[  AND  ta1.date_day >= #{startDate} AND  ta1.date_day <= #{endDate} ]]>
+					</when>
+					<otherwise>
+							 <![CDATA[AND ta1.date_day = #{period_date} ]]>
+					</otherwise>
+				</choose>
+				GROUP BY
+					ta1.ne_code,
+					ta1.alarm_no
+				)ta2
+		GROUP BY ${type} ORDER BY difftime DESC
+	</select>
+	
+	<!-- 告警时长统计 天 周 月 -->
+	<select id="findAlarmDelayAll" parameterType="map" resultType="map" flushCache="true">
+		SELECT
+			ta1.city_name,
+			ta1.area_name,
+			ta1.difftime,
+			ta1.date_day,
+			ta1.date_week,
+			ta1.date_month,
+			ta1.ne_code,
+			ta1.alarm_no,
+			cast(ta1.manufacturer as char) as manufacturer,
+			DATE_FORMAT(ta1.start_time,'%Y-%m-%d %H:%i:%s') start_time,
+			DATE_FORMAT(ta1.cancel_time,'%Y-%m-%d %H:%i:%s') as cancel_time
+	    FROM
+			${tableName} ta1
+		WHERE
+			1 = 1
+		<if test="neCode !='' and neCode !=null">
+			AND ta1.ne_code = #{neCode}
+		</if>
+		<if test="alarmNo !='' and alarmNo !=null">
+			AND ta1.alarm_no = #{alarmNo}
+		</if>
+		<if test="manufacturer !='' and manufacturer !=null">
+			AND ta1.manufacturer = #{manufacturer}
+		</if>	
+		<if test="cityCode !='' and cityCode !=null">
+			AND ta1.city_code = #{cityCode}
+		</if>
+		<if test="areaCode !='' and areaCode!=null">
+			AND ta1.area_code in(${areaCode})
+		</if>
+		<if test="alarmDelay !='' and alarmDelay != null">
+		 	AND ROUND(ta1.difftime,2)>= ROUND(#{alarmDelay},2)
+		</if>
+		<!-- 默认查询当天的数据 -->
+		<if test="tableName=='bts_alarm_delay_day'">
+               <![CDATA[  AND  ta1.date_day >= #{startDate} AND  ta1.date_day <= #{endDate} ]]>
+		</if>
+		<if test="tableName=='bts_alarm_delay_week'">
+               <![CDATA[  AND  ta1.date_day >= CONCAT(DATE_ADD(CURDATE(),INTERVAL -4 WEEK),' 00:00:00') ]]>
+		</if>
+		<if test="tableName=='bts_alarm_delay_month'">
+               <![CDATA[  AND  ta1.date_day >= CONCAT(DATE_ADD(CURDATE(),INTERVAL -1 MONTH),' 00:00:00') ]]>
+		</if>
+		  ORDER BY  ta1.date_day  DESC 
+		<!-- 分页 -->
+		<if test="pageSize !='' and pageSize !=null">
+			LIMIT ${pageSize} OFFSET ${page}
+		</if>
+	</select>
+	
+	<select id="findAlarmDelayCount" parameterType="map" resultType="Integer"  flushCache="true">
+		SELECT count(1)
+		FROM
+		${tableName} ta1
+		WHERE
+		1 = 1
+		<if test="manufacturer !='' and manufacturer !=null">
+			AND ta1.manufacturer = #{manufacturer}
+		</if>	
+		<if test="neCode !='' and neCode !=null">
+			AND ta1.ne_code = #{neCode}
+		</if>
+		<if test="alarmNo !='' and alarmNo !=null">
+			AND ta1.alarm_no = #{alarmNo}
+		</if>
+      <if test="cityCode !='' and cityCode !=null">
+			AND ta1.city_code = #{cityCode}
+		</if>
+		<if test="areaCode !='' and areaCode!=null">
+			AND ta1.area_code in( ${areaCode})
+		</if>
+		<if test="alarmDelay !='' and alarmDelay != null">
+			AND ROUND(ta1.difftime,2)>= ROUND(#{alarmDelay},2)
+		</if>
+		<if test="tableName=='bts_alarm_delay_day'">
+               <![CDATA[  AND  ta1.date_day >= #{startDate} AND  ta1.date_day <= #{endDate} ]]>
+		</if>
+		<if test="tableName=='bts_alarm_delay_week'">
+               <![CDATA[  AND  ta1.date_day >= CONCAT(DATE_ADD(CURDATE(),INTERVAL -4 WEEK),' 00:00:00') ]]>
+		</if>
+		<if test="tableName=='bts_alarm_delay_month'">
+               <![CDATA[  AND  ta1.date_day >= CONCAT(DATE_ADD(CURDATE(),INTERVAL -1 MONTH),' 00:00:00') ]]>
+		</if>
+	</select>
+	
+	<!-- 计算总时长-->
+	<select id="findAlarmDelaySum" parameterType="map" resultType="Double"  flushCache="true">
+	select ROUND(SUM(ta2.difftime),2) as difftime from(
+	SELECT
+			ta1.area_code,ta1.city_code,MAX(ta1.difftime)AS difftime
+		FROM
+			${tableName} ta1
+		WHERE
+			1 = 1
+        <if test="cityCode !='' and cityCode !=null">
+			AND ta1.city_code = #{cityCode}
+		</if>
+		<if test="areaCode !='' and areaCode!=null">
+			AND ta1.area_code in( ${areaCode})
+		</if>
+		<if test="tableName=='bts_alarm_delay_day'">
+               <![CDATA[  AND  ta1.date_day >= #{startDate} AND  ta1.date_day <= #{endDate} ]]>
+		</if>
+		group by ta1.ne_code,ta1.alarm_no
+	)ta2
+		GROUP BY ${areaType}
+	</select>
+	
+		<!-- 计算总频次-->
+	<select id="findAlarmFrequencySum" parameterType="map" resultType="Double"  flushCache="true">
+		SELECT
+			SUM(ta1.difftime) as difftime
+		FROM
+			${tableName} ta1
+		WHERE
+			1 = 1
+        <if test="cityCode !='' and cityCode !=null">
+			AND ta1.city_code = #{cityCode}
+		</if>
+		<if test="areaCode !='' and areaCode!=null">
+			AND ta1.area_code in( ${areaCode})
+		</if>
+		<if test="tableName=='bts_alarm_frequency_day'">
+               <![CDATA[  AND  ta1.date_day >= #{startDate} AND  ta1.date_day <= #{endDate} ]]>
+		</if>
+		
+		GROUP BY ${areaType}
+	</select>
+	
+	<!-- 告警频次统计 天 周 月 -->
+	<select id="findAlarmFrequencyAll" parameterType="map" resultType="map" flushCache="true">
+		SELECT
+			ta1.city_name,
+			ta1.area_name,
+			ta1.ne_code,
+			<!-- ta1.cell_name_cn, -->
+			ta1.difftime,
+			ta1.date_day,
+			ta1.date_week,
+			ta1.date_month,
+			ta1.alarm_no,
+		cast(ta1.manufacturer as char) as manufacturer
+			<!-- DATE_FORMAT(ta1.start_time,'%Y-%m-%d %H:%i:%s') start_time -->
+	    FROM
+			${tableName} ta1
+		WHERE
+			1 = 1
+		<if test="manufacturer !='' and manufacturer !=null">
+			AND ta1.manufacturer = #{manufacturer}
+		</if>	
+		<if test="neCode !='' and neCode !=null">
+			AND ta1.ne_code = #{neCode}
+		</if>	
+		<if test="cityCode !='' and cityCode !=null">
+			AND ta1.city_code = #{cityCode}
+		</if>
+		<if test="areaCode !='' and areaCode!=null">
+			AND ta1.area_code in( ${areaCode})
+		</if>
+		<if test="cellId !='' and cellId !=null">
+			AND ta1.cell_id = #{cellId}
+		</if>
+		<if test="alarmFreq !='' and alarmFreq != null">
+			AND ta1.difftime > ${alarmFreq}
+		</if>
+		<if test="tableName=='bts_alarm_frequency_day'">
+               <![CDATA[  AND  ta1.date_day >= #{startDate} AND  ta1.date_day <= #{endDate} ]]>
+		</if>
+		<if test="tableName=='bts_alarm_frequency_week'">
+               <![CDATA[  AND  ta1.date_day >= CONCAT(DATE_ADD(CURDATE(),INTERVAL -4 WEEK),' 00:00:00') ]]>
+		</if>
+		<if test="tableName=='bts_alarm_frequency_month'">
+               <![CDATA[  AND  ta1.date_day >= CONCAT(DATE_ADD(CURDATE(),INTERVAL -1 MONTH),' 00:00:00') ]]>
+		</if>
+		ORDER BY ta1.start_time DESC
+		<!-- 分页 -->
+		<if test="pageSize !='' and pageSize !=null">
+			LIMIT ${pageSize} OFFSET ${page}
+		</if>
+	</select>
+	
+	<select id="findAlarmFrequencyCount" parameterType="map" resultType="Integer"  flushCache="true">
+		SELECT count(1)
+		FROM
+		${tableName} ta1
+		WHERE
+		1 = 1
+		<if test="manufacturer !='' and manufacturer !=null">
+			AND ta1.manufacturer = #{manufacturer}
+		</if>	
+		<if test="neCode !='' and neCode !=null">
+			AND ta1.ne_code = #{neCode}
+		</if>
+      <if test="cityCode !='' and cityCode !=null">
+			AND ta1.city_code = #{cityCode}
+		</if>
+		<if test="areaCode !='' and areaCode!=null">
+			AND ta1.area_code in( ${areaCode})
+		</if>
+		<if test="cellId !='' and cellId !=null">
+			AND ta1.cell_id = #{cellId}
+		</if>
+		<if test="alarmFreq !='' and alarmFreq != null">
+			AND ta1.difftime > ${alarmFreq}
+		</if>
+		<if test="tableName=='bts_alarm_frequency_day'">
+               <![CDATA[  AND  ta1.date_day >= #{startDate} AND  ta1.date_day <= #{endDate} ]]>
+		</if>
+		<if test="tableName=='bts_alarm_frequency_week'">
+               <![CDATA[  AND  ta1.date_day >= CONCAT(DATE_ADD(CURDATE(),INTERVAL -4 WEEK),' 00:00:00') ]]>
+		</if>
+		<if test="tableName=='bts_alarm_frequency_month'">
+               <![CDATA[  AND  ta1.date_day >= CONCAT(DATE_ADD(CURDATE(),INTERVAL -1 MONTH),' 00:00:00') ]]>
+		</if>
+	</select>
+	
+	
+</mapper>	
+	

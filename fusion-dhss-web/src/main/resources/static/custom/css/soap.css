@@ -1,0 +1,188 @@
+.tab-pane{
+				background: #FFF;
+			}
+			.tab-pane .row{
+				margin-left:0px;
+				margin-right:0px;
+			}
+			.tab-pane {
+				padding-top: 15px;
+				padding-bottom: 15px;
+			}
+			ul.nav-tabs > li >a{
+				margin-left:3px;
+				margin-right:3px;
+				background: #ddd;
+				color:#555;
+			}
+			ul.nav-tabs > li >a:hover{
+				color: #000;
+				background: #ddd;
+			}
+			
+			.forge-heading {
+				border: 1px solid #DDD;
+				margin-top: 8px;
+			}
+			.forge-heading h3{
+				background-color: #efefef;
+			    border-bottom: 2px solid #ddd;
+			    color: #93a0a1;
+			    font-weight: 300;
+			    padding: 1px 10px 0px;
+			    line-height: 28px;
+			    margin:0px;
+			    font-size: 14px;
+			}
+			.forge-heading .form-horizontal{
+				margin-top: 15px;
+			}
+			
+			.btn-group{
+				width:100%;
+			}
+			.btn-group .btn-default{
+				width:92%;
+				text-align: left;
+			}
+			.btn-group .btn-default.dropdown-toggle{
+				width:8%;
+				text-align: center;
+			}
+			.btn-group .dropdown-menu{
+				width:100%;
+			}
+			.form-group input[type='checkbox'],.form-group input[type='radio']{
+				vertical-align: middle;
+				margin-top:0px;
+				margin-right: 5px;
+			}
+			.form-group .radioText{
+				margin-right: 40px;
+			}
+			.form-horizontal .col-sm-8{
+				padding-right: 25px;
+			}
+			
+			.panel-black .panel-heading{
+				background: #34495e;
+				color: #fff;
+				border: 1px solid #ddd;
+			}
+			.panel-black .panel-body{
+				border: 1px solid #ddd;
+				border-top:none;
+			}
+			
+			.radioText,.checkboxText{
+				font-weight: normal;
+				color:#333;
+			}
+			.radioText:hover,.checkboxText:hover{
+				cursor: pointer;
+				color: #888;
+			}
+			
+			.backTop{
+				position:fixed;
+				z-index: 1000;
+				bottom: 40px;
+				right: 30px;
+				width: 40px;
+				height: 40px;
+				display: none;
+				background: url(libs/images/backTop1.png) no-repeat center center;
+				background-color: #F5F5F5;
+				border: 1px solid #ddd;
+			}
+			.backTop:hover{
+				background: url(libs/images/backTop2.png) no-repeat center center;
+				background-color: #999999;
+			}
+			
+			.secondNav{
+				border-left: 4px solid #F5F5F5;
+				border-left: 4px solid #ddd\0;
+				*border-left: 4px solid #ddd;
+				
+				margin-top: 10px;
+				margin-bottom: 10px;
+				margin-left:4px;
+				
+			    background-image:-webkit-linear-gradient(left, #f5f5f5 10%, #ffffff 20%, #ffffff);
+			    background-image:-moz-linear-gradient(left, #f5f5f5 10%, #ffffff 20%, #ffffff);
+			    background-image:-o-linear-gradient(left, #f5f5f5 10%, #ffffff 20%, #ffffff);
+			    background-image:-webkit-gradient(linear, 0 0, 100% 0, color-stop(0.1, #f5f5f5), color-stop(0.2, #ffffff), to(#ffffff));
+			    background-image:linear-gradient(left, #f5f5f5 10%, #ffffff 20%, #ffffff);
+			}
+			.secondNav h4{
+				font-size: 14px;
+				font-weight: bold;
+				margin:0px;
+				padding:5px 0px 0px 0px;
+				color: #333;
+				text-indent: 10px;
+			}
+			.secondNav label{
+				color: #aaa;
+			}
+			/* .tab-pane{
+				min-height:500px;
+			} */
+			.tab-pane select{
+				width:100%;
+				height:34px;
+				line-height:34px;
+			}
+			.tab-pane .checkboxText,.tab-pane .radioText{
+				display:inline-block;
+				height:34px;
+				line-height:34px;
+				margin-top: 0px;
+				margin-bottom:0px;
+			}
+			
+			
+
+#orderListWrap{
+	position: absolute;
+	/* top: 207px; */
+	top: 155px;
+	right:30px;
+	width:50%;
+}			
+.orderList label{
+	font-weight:normal;
+	display:inline-block;
+	color: #555;
+	padding: 1px 3px;
+	cursor:pointer;
+	margin: 2px 4px;
+}
+.orderList label input{
+	margin-right: 2px;
+}
+
+#resultTable_wrapper div.row{
+	margin: 0px;
+}
+#toTop{
+	position: fixed;
+	width: 40px;
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	background: #000;
+	z-index: 10000;
+	right: 20px;
+	bottom: 30px;
+	cursor:pointer;
+	border-radius: 3px;
+	color: #FFF;
+	font-size: 22px;
+	opacity: 0.65;
+	display:none;
+}
+#toTop:hover{
+	color: orange;
+}

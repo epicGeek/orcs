@@ -1,0 +1,13 @@
+{
+	"result":[
+        {"neid":"HSS50","nename":"涓婃捣HSS60","netype":"ALLHSS","neState":"0","location":"","idsVersion":"","swVersion":"","remarks":"",
+          "children":[
+            {"neid":"SHHSS50FE12BNK","nename":"SHHSS50FE12BNK","netype":"HSS","neState":"0","location":"","idsVersion":"","swVersion":"","remarks":"",
+              "children":[
+              {"neid":"shhss501fe01bnk","nename":"shhss501fe01bnk","netype":"HSSTYPE","neState":"0","location":"","idsVersion":"","swVersion":"","remarks":""}]
+            },
+            {"neid":"SHHSS50FE13BNK","nename":"SHHSS50FE13BNK","netype":"HLR-AHUB","neState":"0","location":"","idsVersion":"","swVersion":"","remarks":""},
+            {"neid":"SHHSS50FE13BNK","nename":"SHHSS50FE13BNK","netype":"HLR-AHUB","neState":"0","location":"","idsVersion":"","swVersion":"","remarks":""}]
+        }
+    ]
+}

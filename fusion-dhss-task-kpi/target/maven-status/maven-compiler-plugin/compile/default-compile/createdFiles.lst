@@ -1,0 +1,5 @@
+com\nokia\ices\apps\fusion\JdbcDataSourceSettings.class
+com\nokia\ices\apps\fusion\App.class
+com\nokia\ices\apps\fusion\CustomSettings.class
+META-INF\spring-configuration-metadata.json
+com\nokia\ices\apps\fusion\task\TaskKPI.class

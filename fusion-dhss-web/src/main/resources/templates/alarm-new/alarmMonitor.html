@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="zh-cn">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="../assets/images/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="../assets/plugins/bootstrap-3.3.2-dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="../assets/plugins/kendoui2015.1.318/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="../assets/plugins/kendoui2015.1.318/styles/kendo.silver.min.css" />
+    <link rel="stylesheet" href="../assets/plugins/cplugin/cStyle.css">
+    <link rel="stylesheet" href="../assets/css/nsn-home-style.css">
+    <script src="../assets/plugins/jquery/jquery-1.11.1.min.js"></script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="../assets/plugins/jquery/html5shiv.min.js"></script>
+        <script src="../assets/plugins/jquery/respond.min.js"></script>
+        <![endif]-->
+    <script src="../assets/plugins/cplugin/jquery.easing.1.3.js"></script>
+    <script src="../assets/plugins/cplugin/cjs.js"></script>
+    <title>NOKIA DHSS智能运维平台</title>
+    <style type="text/css" media="screen">
+    .detailsStyle li {
+        word-break: break-all;
+    }
+    
+    .detailsStyle label {
+        font-size: 14px;
+    }
+    #split,#split >div{
+        min-height:500px;
+        border:0px;
+        overflow:visible;
+    }
+    /*网络拓扑*/
+    .collectioned,
+    .noCollectioned {
+        margin-left: 5px;
+    }
+    .collectioned {
+        color: #FF4D00;
+    }
+    .collectioned:hover {
+        color: #888;
+        background: #fff;
+    }
+    
+    .noCollectioned {
+        color: #888;
+    }
+    
+    .noCollectioned:hover {
+        color: #FF4D00;
+        background: #fff;
+    }
+    
+    .small {
+        color: #888;
+    }
+    
+    .k-state-selected .small {
+        color: #fff;
+    }
+    /*左侧tab*/
+    
+    #left_pane_Tabstrip {
+        border: 0px;
+        background: #fff;
+    }
+    
+    #left_pane_Tabstrip .k-content {
+        height: 400px;
+    }
+    /*kendo tab*/
+    
+    .k-tabstrip>.k-content {
+        border: 0px;
+        padding-top: 10px;
+        overflow: auto;
+        margin: 0px;
+    }
+    
+    .k-tabstrip .k-tabstrip-items {
+        border-bottom: 1px solid #ddd;
+        background: #efefef;
+    }
+    
+    .k-tabstrip-items .k-loading.k-complete {
+        border: 0px;
+    }
+    
+    .k-tabstrip-items .k-link {
+        padding: 4px 6px;
+    }
+    /*右侧tab的删除按钮*/
+    .removeTabBtn {
+        position: relative;
+        top: -3px;
+        right: -3px;
+    }
+    .removeTabBtn:hover {
+        color: red;
+    }
+    td.level1{
+        background:yellow;
+    }
+    td.level2{
+        background:orange;
+    }
+    td.level3{
+        background:#FF5151;
+    }
+    /*悬浮框*/
+    
+    .k-widget.k-tooltip {
+        padding: 2px;
+    }
+    
+    .k-tooltip table {
+        width: 100%;
+        line-height: 28px;
+        background: #fff;
+        color: #333;
+    }
+    
+    .k-tooltip th {
+        width: 60px;
+        text-align: right;
+        padding-right: 10px;
+        vertical-align: top;
+    }
+    
+    .k-tooltip td {
+        text-align: left;
+    }
+    
+    .collectionA {
+        cursor: pointer;
+    }
+    </style>
+</head>
+
+<body>
+    <!--顶部-->
+    <div class="nav navbar navbar-fixed-top navBox">
+        <div class="container-fluid">
+            <div class="col-md-6 col-sm-6 col-xs-12">
+                <a href="../home.html"><img src="../assets/n-images/nLogo.png" class="img-responsive" /></a>
+            </div>
+            <div class="com-md-6 col-sm-6 col-xs-12">
+                <div id='account' class="pull-right">
+                    <a title="修改密码">Admin</a>&nbsp;&nbsp;
+                    <a title="退出" href="../login.html"><i class="glyphicon glyphicon-log-out"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--顶部导航栏-->
+    <div class="n-nav n-nav-bg">
+        <div class="container-fluid">
+            <div class="row noMarginTop noMarginBottom">
+                <div class="col-md-2 col-sm-3 col-xs-10">
+                    <div class="clearfix">
+                        <div class="n-navbar-title">
+                            <a role="button" class="btn n-icon n-icon-32 n-icon-color3" href="../home.html">
+                                <i class="glyphicon glyphicon-menu-left"></i>
+                            </a>
+                            &nbsp;
+                            <font id="parentMenuName">智能运维</font>
+                        </div>
+                    </div>
+                </div>
+                <div style="float:right; _position:relative;" class="col-md-offset-1 col-md-9 col-sm-9 col-xs-14">
+                    <div class="n-navbar-nav clearfix" id="topNavListWrap">
+                        <div id="topNavList">
+                            <ul class="nav navbar-nav" id="navList">
+                                <li><a href="overallIndicator.html">总体指标</a></li>
+                                <li><a href="indicatorMonitor.html">指标监控</a></li>
+                                <li><a href="oneKeyBackup.html">一键备份</a></li>
+                                <li><a href="alarmMonitor.html" class="active">告警监控</a></li>
+                                <li><a href="intelligentInspection.html">智能巡检</a></li>
+                                <li><a href="nodeSwitching.html">单元倒换</a></li>
+                                <li><a href="neSwitching.html">网元倒换</a></li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-info" id="overFlowBtn" style="display: none;">
+                            <span class="glyphicon glyphicon-align-justify"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--//顶部导航栏-->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <nav style="padding: 0px 0px 10px 0px">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="alarmMonitor.html">活动告警</a></li>
+                        <li><a href="alarmMonitor_history.html">历史告警</a></li>
+                    </ul>
+                </nav>
+                <div id='split'>
+                    <div>
+                        <div class="panel panel-default">
+                            <div class="panel-body noPadding">
+                                <div id="left_pane_Tabstrip">
+                                    <ul>
+                                        <li class="k-state-active">
+                                            网络拓扑
+                                        </li>
+                                        <li>
+                                            查询条件
+                                        </li>
+                                        <li>
+                                            我的收藏
+                                        </li>
+                                    </ul>
+                                    <div>
+                                        <div id='categoryTreeview'></div>
+                                        <script id="treeview-template" type="text/kendo-ui-template">
+                                            #: item.text # <small class='small'>( #:item.value# )</small> #if(item.collection){#
+                                            <code class="collectionIconBtn collectioned" title='取消收藏'>
+                                            <i class="glyphicon glyphicon-star"></i>
+                                        </code> #} else {#
+                                            <code class="collectionIconBtn noCollectioned" title='收藏'>
+                                            <i class="glyphicon glyphicon-star-empty"></i>
+                                        </code> #}#
+                                        </script>
+                                        <script id="toolTip-template" type="text/x-kendo-template">
+                                            <p>#=target#</p>
+                                        </script>
+                                    </div>
+                                    <div>
+                                        <br>
+                                        <br>
+                                        <div class="form-inline">
+                                            <div class="form-group">
+                                                <b>时间&nbsp;&nbsp;&nbsp;</b>
+                                                <input type="text" id='dateTime' style="width:200px;">
+                                            </div>
+                                        </div>
+                                        <div class="form-inline">
+                                            <div class="form-group">
+                                                <b>告警号</b>
+                                                <input type="text" class="form-control input-sm" style="width:200px;">
+                                            </div>
+                                        </div>
+                                        <div class="form-inline">
+                                            <div class="form-group">
+                                                <b>关键字</b>
+                                                <input type="text" class="form-control input-sm" style="width:200px;">
+                                            </div>
+                                        </div>
+                                        <div class="form-inline">
+                                            <div class="form-group">
+                                                <b>描述&nbsp;&nbsp;&nbsp;</b>
+                                                <textarea class="form-control input-sm" style="width:200px;height: 100px;"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div id='myCollectionGrid'></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer text-right">
+                                <button id='queryBtn' class="btn btn-primary btn-sm">
+                                    <span class="glyphicon glyphicon-search"></span> 查询
+                                </button>&nbsp;&nbsp;
+                                <button id='resetBtn' class="btn btn-default btn-sm">
+                                    <span class="glyphicon glyphicon-repeat"></span> 重置
+                                </button>&nbsp;&nbsp;
+                                <button id='collectConditionBtn' class="btn btn-danger btn-sm">
+                                    <span class="glyphicon glyphicon-star-empty"></span> 收藏查询条件
+                                </button>
+                                <button id='cancelMultiCollectbtn' class="btn btn-danger btn-sm" style='display: none;'>
+                                    <span class="glyphicon glyphicon-star"></span> 批量取消收藏
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="panel panel-default">
+                            <div class="panel-body noPadding" style="min-height:450px;">
+                                <div id="right_pane_Tabstrip">
+                                    <ul>
+                                        <!--  <li class="k-state-active">
+                                   HSSFE-01  <i class='removeTabBtn glyphicon glyphicon-remove'></i>
+                               </li> -->
+                                    </ul>
+                                    <!-- <div>
+                                <div class="dataGrid"></div>
+                            </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+            </div>
+            <div class="col-sm-9 noPaddingLeft">
+            </div>
+        </div>
+    </div>
+    <script type="text/x-kendo-template" id="template">
+        <div class='detailsStyle'>
+            <h4>基本信息：</h4>
+            <ul>
+                <li>
+                    <label>网元名称：</label>#= neName #</li>
+                <li>
+                    <label>网元CODE：</label>#= neCode #</li>
+                <li>
+                    <label>NOTIFY ID：</label>#= id #</li>
+                <li>
+                    <label>附加信息：</label>#= addInfo #</li>
+                <li>
+                    <label>USER INFO：</label>#= userInfo #</li>
+                <li>
+                    <label>告警内容：</label>#= content #</li>
+                <li>
+                    <label>告警描述：</label>#= desc #</li>
+            </ul>
+        </div>
+    </script>
+    </div>
+    <!--内容部分-->
+    <!--底部-->
+    <div class="n-footer ">
+        <div class="container ">
+            <div class="footer-bottom ">
+                The system developed by Nokia
+            </div>
+        </div>
+    </div>
+    <!--//底部-->
+    <script type="text/javascript" src="../assets/plugins/bootstrap-3.3.2-dist/js/bootstrap.js"></script>
+    <!-- echarts -->
+    <script type="text/javascript" src="../assets/plugins/echarts-2.2.5/dist/echarts-all.js"></script>
+    <script type="text/javascript" src="../assets/plugins/kendoui2015.1.318/js/kendo.all.min.js"></script>
+    <script type="text/javascript" src="../assets/plugins/kendoui2015.1.318/js/cultures/kendo.culture.zh-CN.min.js"></script>
+    <script type="text/javascript" src="../assets/plugins/kendoui2015.1.318/js/messages/kendo.messages.zh-CN.min.js"></script>
+    <script type="text/javascript" src="../assets/js/nav.js"></script>
+    <script src="../assets/js/intelligentOperation/alarmMonitor.js"></script>
+</body>
+
+</html>

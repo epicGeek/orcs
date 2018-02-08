@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.nokia.ices.apps.fusion.score.repository.BtsAlarmJobRepository">
+
+	<!--  基站性能告警工单 -->
+	<select id="findBtsJobAll" parameterType="map"
+		resultType="map" flushCache="true">
+		     SELECT
+				ta1.city_name,
+				ta1.ne_code,
+				ta1.area_name,
+				ta1.area_code,
+				ta1.city_code,
+				ta1.ne_name_cn,
+				ta1.score,
+				ta1.frequency_score AS frequencyScore,
+				ta1.delay_score AS  delayScore,
+				cast(ta1.manufacturer as char) as manufacturer,
+				DATE_FORMAT(ta1.cycle,'%Y-%m-%d %H:%i:%s') cycle
+			FROM
+					bts_alarm_score ta1
+					WHERE
+					1 = 1 
+				<if test="neCode !='' and neCode!=null">
+					   AND ta1.ne_code=#{neCode}
+				</if>
+				<if test="cityCode !='' and cityCode !=null">
+						AND ta1.city_code = #{cityCode}
+				</if>
+				<if test="areaCode !='' and areaCode!=null">
+						AND ta1.area_code in( ${areaCode})
+				</if>
+		  		<if test="cycleStart !='' and cycleStart !=null">
+			           <![CDATA[ 
+					      AND ta1.cycle >= #{cycleStart}
+					   ]]>
+				</if>
+				<if test="cycleEnd !='' and cycleEnd !=null">
+				      <![CDATA[ 
+					      AND ta1.cycle <=#{cycleEnd}
+					    ]]>
+				</if>
+				 <if test="score !='' and score !=null">
+			           <![CDATA[ 
+					      AND ta1.score >= #{score}
+					   ]]>
+				</if>
+
+			ORDER BY ta1.cycle DESC
+
+		<!-- 分页 -->
+		<if test="pageSize !='' and pageSize !=null">
+			LIMIT ${pageSize} OFFSET ${page}
+		</if>
+	</select>
+
+	<select id="findBtsJobCount" parameterType="map"
+		resultType="Integer" flushCache="true">
+
+		SELECT
+				count(1)
+			FROM
+					bts_alarm_score ta1
+					WHERE
+					1 = 1 
+				<if test="neCode !='' and neCode!=null">
+					   AND ta1.ne_code=#{neCode}
+				</if>
+				<if test="cityCode !='' and cityCode !=null">
+						AND ta1.city_code = #{cityCode}
+				</if>
+				<if test="areaCode !='' and areaCode!=null">
+						AND ta1.area_code in( ${areaCode})
+				</if>
+		  		<if test="cycleStart !='' and cycleStart !=null">
+			           <![CDATA[ 
+					      AND ta1.cycle >= #{cycleStart}
+					   ]]>
+				</if>
+				<if test="cycleEnd !='' and cycleEnd !=null">
+				      <![CDATA[ 
+					      AND ta1.cycle <= #{cycleEnd}
+					    ]]>
+				</if>
+				<if test="score !='' and score !=null">
+			           <![CDATA[ 
+					      AND ta1.score >= #{score}
+					   ]]>
+				</if>
+	</select>
+	
+<!-- =========================================	 -->
+	<!--  基站工单 -->
+	<select id="findBtsScoreJobAll" parameterType="map"
+		resultType="map" flushCache="true">
+		     SELECT
+				ta1.city_name,
+				ta1.area_name,
+				ta1.ne_code,
+				ta1.cell_id,
+				ta1.ne_name_cn,
+				ta1.alarm_score,
+				ta1.grade,
+				ta1.total_score,
+				ta1.cycle_hour,
+				ta1.cycle_date,
+				cast(ta1.manufacturer as char) as manufacturer,
+				DATE_FORMAT(ta1.cycle, '%Y-%m-%d %H:%i:%s')AS cycle
+			FROM
+					bts_score_hour ta1
+					WHERE
+					1 = 1 
+				<if test="neCode !='' and neCode!=null">
+					   AND ta1.ne_code=#{neCode}
+				</if>
+				<if test="cityCode !='' and cityCode !=null">
+						AND ta1.city_code = #{cityCode}
+				</if>
+				<if test="areaCode !='' and areaCode!=null">
+						AND ta1.area_code in( ${areaCode})
+				</if>
+		  		<if test="cycleStart !='' and cycleStart !=null">
+			           <![CDATA[ 
+					      AND ta1.cycle >= #{cycleStart}
+					   ]]>
+				</if>
+				<if test="cycleEnd !='' and cycleEnd !=null">
+				      <![CDATA[ 
+					      AND ta1.cycle <=#{cycleEnd}
+					    ]]>
+				</if>
+				<if test="grade !='' and grade !=null">
+					AND ta1.grade = #{grade}
+				</if>
+			GROUP BY ta1.cycle_date,ta1.ne_code,ta1.cycle_hour,ta1.total_score
+			ORDER BY ta1.cycle DESC
+
+		<!-- 分页 -->
+		<if test="pageSize !='' and pageSize !=null">
+			LIMIT ${pageSize} OFFSET ${page}
+		</if>
+	</select>
+
+	<select id="findBtsScoreJobCount" parameterType="map"
+		resultType="Integer" flushCache="true">
+
+					SELECT count(1) from
+						(SELECT
+						DISTINCT ta1.cycle_date,
+						ta1.ne_code,
+						ta1.cycle_hour,
+						ta1.total_score
+						FROM
+						bts_score_hour ta1
+					WHERE
+					1 = 1 
+					<if test="neCode !='' and neCode!=null">
+					   AND ta1.ne_code=#{neCode}
+				</if>
+				<if test="cityCode !='' and cityCode !=null">
+						AND ta1.city_code = #{cityCode}
+				</if>
+				<if test="areaCode !='' and areaCode!=null">
+						AND ta1.area_code in( ${areaCode})
+				</if>
+		  		<if test="cycleStart !='' and cycleStart !=null">
+			           <![CDATA[ 
+					      AND ta1.cycle >= #{cycleStart}
+					   ]]>
+				</if>
+				<if test="cycleEnd !='' and cycleEnd !=null">
+				      <![CDATA[ 
+					      AND ta1.cycle <=#{cycleEnd}
+					    ]]>
+				</if>
+				<if test="grade !='' and grade !=null">
+					AND ta1.grade = #{grade}
+				</if>
+		)ta2
+	</select>
+</mapper>	
+	
